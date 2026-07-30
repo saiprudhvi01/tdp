@@ -72,10 +72,10 @@ const Home = () => {
       </div>
 
       {/* Main Content Overlay */}
-      <div className="relative z-10 flex flex-col min-h-screen max-h-screen justify-between pb-12 overflow-hidden">
+      <div className="relative z-10 flex flex-col min-h-screen justify-between pb-12">
         
         {/* Leaders Showcase - Static Grid */}
-        <section className="py-4 md:py-6 relative w-full flex items-center justify-center px-4 flex-1">
+        <section className="py-2 md:py-4 relative w-full flex items-center justify-center px-4">
           
           {/* Cards Grid */}
           <div className="relative z-10 w-full max-w-7xl mx-auto perspective-[1800px]">
@@ -90,7 +90,7 @@ const Home = () => {
                     opacity: 1, 
                     scale: isActive ? 1.05 : 1,
                     translateZ: isActive ? 40 : 0,
-                    y: isActive ? -15 : 0,
+                    y: isActive ? -5 : 0,
                     rotateX: isActive ? 0 : -2
                   }}
                   transition={{ 
@@ -99,7 +99,7 @@ const Home = () => {
                     ease: [0.25, 0.1, 0.25, 1]
                   }}
                   onClick={() => setActiveCardIndex(index)}
-                  className={`cursor-pointer w-full h-[clamp(200px,35vh,280px)] rounded-[16px] md:rounded-[20px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
+                  className={`cursor-pointer w-full h-[280px] sm:h-[300px] md:h-[340px] lg:h-[380px] rounded-[24px] md:rounded-[32px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
                     ${isActive 
                       ? 'border-4 md:border-5 border-[#F4B400] shadow-[0_0_30px_rgba(244,180,0,0.6),0_0_60px_rgba(244,180,0,0.4),0_0_90px_rgba(244,180,0,0.2)] z-20' 
                       : 'border-3 md:border-4 border-white/50 shadow-[0_18px_40px_rgba(0,0,0,0.18)] hover:border-[#F4B400]/70 z-10'
@@ -111,7 +111,7 @@ const Home = () => {
                     <>
                       {/* Outer glow layer 1 */}
                       <motion.div
-                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
+                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
                         animate={{ 
                           boxShadow: [
                             '0 0 30px rgba(244, 180, 0, 0.3)',
@@ -130,7 +130,7 @@ const Home = () => {
                       />
                       {/* Outer glow layer 2 - different color */}
                       <motion.div
-                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
+                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
                         animate={{ 
                           boxShadow: [
                             '0 0 25px rgba(255, 213, 79, 0.25)',
@@ -150,7 +150,7 @@ const Home = () => {
                       />
                       {/* Animated border gradient */}
                       <motion.div
-                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
+                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
                         style={{
                           background: 'conic-gradient(from 0deg, transparent, #F4B400, transparent, #FFD54F, transparent)',
                           opacity: 0.3
@@ -160,7 +160,7 @@ const Home = () => {
                       />
                       {/* Spotlight effect */}
                       <motion.div
-                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
+                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
                         animate={{
                           background: [
                             'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)',
@@ -178,7 +178,7 @@ const Home = () => {
                   )}
                   {/* 3D Depth/Thickness Effect - Side Face */}
                   <div 
-                    className="absolute inset-0 rounded-[16px] md:rounded-[20px] bg-gradient-to-br from-[#E8E0D0] to-[#D8D0C0] -z-10"
+                    className="absolute inset-0 rounded-[24px] md:rounded-[32px] bg-gradient-to-br from-[#E8E0D0] to-[#D8D0C0] -z-10"
                     style={{ 
                       transform: 'translateZ(-10px)',
                       boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
@@ -187,7 +187,7 @@ const Home = () => {
                   
                   {/* 3D Depth/Thickness Effect - Bottom Face */}
                   <div 
-                    className="absolute bottom-0 left-0 right-0 h-6 md:h-8 rounded-b-[16px] md:rounded-b-[20px] bg-gradient-to-b from-[#D8D0C0] to-[#C8C0B0] -z-20"
+                    className="absolute bottom-0 left-0 right-0 h-6 md:h-8 rounded-b-[24px] md:rounded-b-[32px] bg-gradient-to-b from-[#D8D0C0] to-[#C8C0B0] -z-20"
                     style={{ 
                       transform: 'translateZ(-10px) translateY(6px)',
                       boxShadow: '0 10px 30px rgba(0,0,0,0.4)'
