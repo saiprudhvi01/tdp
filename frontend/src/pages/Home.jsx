@@ -61,7 +61,7 @@ const Home = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
-            backgroundImage: "url('/bgimages/homebgnew2.png')",
+            backgroundImage: "url('/bgimages/bg image final.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center'
           }}
@@ -72,14 +72,14 @@ const Home = () => {
       </div>
 
       {/* Main Content Overlay */}
-      <div className="relative z-10 flex flex-col min-h-screen justify-between pb-12">
+      <div className="relative z-10 flex flex-col min-h-screen max-h-screen justify-between pb-12 overflow-hidden">
         
         {/* Leaders Showcase - Static Grid */}
-        <section className="py-6 md:py-8 relative w-full flex items-center justify-center px-4">
+        <section className="py-4 md:py-6 relative w-full flex items-center justify-center px-4 flex-1">
           
           {/* Cards Grid */}
           <div className="relative z-10 w-full max-w-7xl mx-auto perspective-[1800px]">
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 w-full" style={{ transformStyle: 'preserve-3d' }}>
+            <div className="grid grid-cols-4 gap-2 md:gap-4 w-full" style={{ transformStyle: 'preserve-3d' }}>
             {leaders.map((leader, index) => {
               const isActive = index === activeCardIndex;
               return (
@@ -99,7 +99,7 @@ const Home = () => {
                     ease: [0.25, 0.1, 0.25, 1]
                   }}
                   onClick={() => setActiveCardIndex(index)}
-                  className={`cursor-pointer w-full h-[350px] sm:h-[380px] md:h-[420px] lg:h-[450px] rounded-[24px] md:rounded-[32px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
+                  className={`cursor-pointer w-full h-[clamp(200px,35vh,280px)] rounded-[16px] md:rounded-[20px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
                     ${isActive 
                       ? 'border-4 md:border-5 border-[#F4B400] shadow-[0_0_30px_rgba(244,180,0,0.6),0_0_60px_rgba(244,180,0,0.4),0_0_90px_rgba(244,180,0,0.2)] z-20' 
                       : 'border-3 md:border-4 border-white/50 shadow-[0_18px_40px_rgba(0,0,0,0.18)] hover:border-[#F4B400]/70 z-10'
@@ -111,7 +111,7 @@ const Home = () => {
                     <>
                       {/* Outer glow layer 1 */}
                       <motion.div
-                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
+                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
                         animate={{ 
                           boxShadow: [
                             '0 0 30px rgba(244, 180, 0, 0.3)',
@@ -130,7 +130,7 @@ const Home = () => {
                       />
                       {/* Outer glow layer 2 - different color */}
                       <motion.div
-                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
+                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
                         animate={{ 
                           boxShadow: [
                             '0 0 25px rgba(255, 213, 79, 0.25)',
@@ -150,7 +150,7 @@ const Home = () => {
                       />
                       {/* Animated border gradient */}
                       <motion.div
-                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
+                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
                         style={{
                           background: 'conic-gradient(from 0deg, transparent, #F4B400, transparent, #FFD54F, transparent)',
                           opacity: 0.3
@@ -160,7 +160,7 @@ const Home = () => {
                       />
                       {/* Spotlight effect */}
                       <motion.div
-                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
+                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
                         animate={{
                           background: [
                             'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)',
@@ -178,7 +178,7 @@ const Home = () => {
                   )}
                   {/* 3D Depth/Thickness Effect - Side Face */}
                   <div 
-                    className="absolute inset-0 rounded-[24px] md:rounded-[32px] bg-gradient-to-br from-[#E8E0D0] to-[#D8D0C0] -z-10"
+                    className="absolute inset-0 rounded-[16px] md:rounded-[20px] bg-gradient-to-br from-[#E8E0D0] to-[#D8D0C0] -z-10"
                     style={{ 
                       transform: 'translateZ(-10px)',
                       boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
@@ -187,7 +187,7 @@ const Home = () => {
                   
                   {/* 3D Depth/Thickness Effect - Bottom Face */}
                   <div 
-                    className="absolute bottom-0 left-0 right-0 h-6 md:h-8 rounded-b-[24px] md:rounded-b-[32px] bg-gradient-to-b from-[#D8D0C0] to-[#C8C0B0] -z-20"
+                    className="absolute bottom-0 left-0 right-0 h-6 md:h-8 rounded-b-[16px] md:rounded-b-[20px] bg-gradient-to-b from-[#D8D0C0] to-[#C8C0B0] -z-20"
                     style={{ 
                       transform: 'translateZ(-10px) translateY(6px)',
                       boxShadow: '0 10px 30px rgba(0,0,0,0.4)'
@@ -227,7 +227,7 @@ const Home = () => {
         </section>
 
         {/* Main Motto & Sub-title */}
-        <section className="text-center my-4 md:my-6 px-4">
+        <section className="text-center my-2 md:my-4 px-4">
           <div className="inline-flex items-center gap-2 md:gap-3">
             <span className="text-amber-400 text-lg md:text-xl font-bold">➻</span>
             <h2 className="text-lg md:text-2xl lg:text-4xl font-extrabold text-white tracking-wide drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
@@ -241,9 +241,9 @@ const Home = () => {
         </section>
 
         {/* Stat Widgets & Bottom Action Area */}
-        <section className="w-full max-w-6xl mx-auto px-4 md:px-6 mt-2 md:mt-4">
+        <section className="w-full max-w-6xl mx-auto px-4 md:px-6 mt-1 md:mt-2">
           <div className="flex justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 max-w-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 max-w-2xl">
             
             {/* Stat Glass Box 1 */}
             <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-xl md:rounded-2xl p-3 md:p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
