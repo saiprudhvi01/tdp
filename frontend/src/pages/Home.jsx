@@ -75,11 +75,11 @@ const Home = () => {
       <div className="relative z-10 flex flex-col min-h-screen justify-between pb-12">
         
         {/* Leaders Showcase - Static Grid */}
-        <section className="my-auto py-8 relative w-full min-h-screen flex items-center justify-center px-4">
+        <section className="py-6 md:py-8 relative w-full flex items-center justify-center px-4">
           
           {/* Cards Grid */}
           <div className="relative z-10 w-full max-w-7xl mx-auto perspective-[1800px]">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full" style={{ transformStyle: 'preserve-3d' }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 w-full" style={{ transformStyle: 'preserve-3d' }}>
             {leaders.map((leader, index) => {
               const isActive = index === activeCardIndex;
               return (
@@ -88,21 +88,21 @@ const Home = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ 
                     opacity: 1, 
-                    scale: isActive ? 1.12 : 1,
-                    translateZ: isActive ? 80 : 0,
-                    y: isActive ? -30 : 0,
+                    scale: isActive ? 1.05 : 1,
+                    translateZ: isActive ? 40 : 0,
+                    y: isActive ? -15 : 0,
                     rotateX: isActive ? 0 : -2
                   }}
                   transition={{ 
-                    duration: 0.8,
+                    duration: 0.6,
                     delay: index * 0.1,
                     ease: [0.25, 0.1, 0.25, 1]
                   }}
                   onClick={() => setActiveCardIndex(index)}
-                  className={`cursor-pointer w-full h-[480px] md:h-[520px] rounded-[38px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
+                  className={`cursor-pointer w-full h-[380px] sm:h-[420px] md:h-[480px] lg:h-[520px] rounded-[28px] md:rounded-[38px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
                     ${isActive 
-                      ? 'border-6 border-[#F4B400] shadow-[0_0_50px_rgba(244,180,0,0.8),0_0_100px_rgba(244,180,0,0.5),0_0_150px_rgba(244,180,0,0.3)] z-20' 
-                      : 'border-4 border-white/50 shadow-[0_18px_40px_rgba(0,0,0,0.18)] hover:border-[#F4B400]/70 z-10'
+                      ? 'border-4 md:border-6 border-[#F4B400] shadow-[0_0_30px_rgba(244,180,0,0.6),0_0_60px_rgba(244,180,0,0.4),0_0_90px_rgba(244,180,0,0.2)] z-20' 
+                      : 'border-3 md:border-4 border-white/50 shadow-[0_18px_40px_rgba(0,0,0,0.18)] hover:border-[#F4B400]/70 z-10'
                     }`}
                   style={{ transformStyle: 'preserve-3d' }}
                 >
@@ -111,7 +111,7 @@ const Home = () => {
                     <>
                       {/* Outer glow layer 1 */}
                       <motion.div
-                        className="absolute inset-0 rounded-[38px] -z-10"
+                        className="absolute inset-0 rounded-[28px] md:rounded-[38px] -z-10"
                         animate={{ 
                           boxShadow: [
                             '0 0 30px rgba(244, 180, 0, 0.3)',
@@ -130,7 +130,7 @@ const Home = () => {
                       />
                       {/* Outer glow layer 2 - different color */}
                       <motion.div
-                        className="absolute inset-0 rounded-[38px] -z-10"
+                        className="absolute inset-0 rounded-[28px] md:rounded-[38px] -z-10"
                         animate={{ 
                           boxShadow: [
                             '0 0 25px rgba(255, 213, 79, 0.25)',
@@ -150,7 +150,7 @@ const Home = () => {
                       />
                       {/* Animated border gradient */}
                       <motion.div
-                        className="absolute inset-0 rounded-[38px] -z-10"
+                        className="absolute inset-0 rounded-[28px] md:rounded-[38px] -z-10"
                         style={{
                           background: 'conic-gradient(from 0deg, transparent, #F4B400, transparent, #FFD54F, transparent)',
                           opacity: 0.3
@@ -160,7 +160,7 @@ const Home = () => {
                       />
                       {/* Spotlight effect */}
                       <motion.div
-                        className="absolute inset-0 rounded-[38px] -z-10"
+                        className="absolute inset-0 rounded-[28px] md:rounded-[38px] -z-10"
                         animate={{
                           background: [
                             'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)',
@@ -178,24 +178,24 @@ const Home = () => {
                   )}
                   {/* 3D Depth/Thickness Effect - Side Face */}
                   <div 
-                    className="absolute inset-0 rounded-[38px] bg-gradient-to-br from-[#E8E0D0] to-[#D8D0C0] -z-10"
+                    className="absolute inset-0 rounded-[28px] md:rounded-[38px] bg-gradient-to-br from-[#E8E0D0] to-[#D8D0C0] -z-10"
                     style={{ 
-                      transform: 'translateZ(-15px)',
+                      transform: 'translateZ(-10px)',
                       boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
                     }} 
                   />
                   
                   {/* 3D Depth/Thickness Effect - Bottom Face */}
                   <div 
-                    className="absolute bottom-0 left-0 right-0 h-8 rounded-b-[38px] bg-gradient-to-b from-[#D8D0C0] to-[#C8C0B0] -z-20"
+                    className="absolute bottom-0 left-0 right-0 h-6 md:h-8 rounded-b-[28px] md:rounded-b-[38px] bg-gradient-to-b from-[#D8D0C0] to-[#C8C0B0] -z-20"
                     style={{ 
-                      transform: 'translateZ(-15px) translateY(8px)',
+                      transform: 'translateZ(-10px) translateY(6px)',
                       boxShadow: '0 10px 30px rgba(0,0,0,0.4)'
                     }} 
                   />
                   
                   {/* Image Container - photo fills width, cropped at top, no inner box/padding */}
-                  <div className="relative w-full overflow-hidden bg-gradient-to-b from-[#F8F5EE] to-[#F6F1E8]" style={{ height: '380px' }}>
+                  <div className="relative w-full overflow-hidden bg-gradient-to-b from-[#F8F5EE] to-[#F6F1E8]" style={{ height: '280px' }}>
                     <img
                       src={leader.image}
                       alt={leader.name}
@@ -203,19 +203,19 @@ const Home = () => {
                       style={{ objectPosition: 'center top' }}
                     />
                     {/* subtle fade at bottom of image into card body */}
-                    <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#FBF8F2] to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#FBF8F2] to-transparent" />
                   </div>
 
                   {/* Card Content Footer */}
-                  <div className="px-3 pt-2 pb-3 text-center flex flex-col items-center justify-center">
-                    <h3 className="text-base md:text-lg font-black text-[#B22222] tracking-tight leading-tight">
+                  <div className="px-2 pt-1.5 pb-2 text-center flex flex-col items-center justify-center">
+                    <h3 className="text-sm md:text-base lg:text-lg font-black text-[#B22222] tracking-tight leading-tight">
                       {leader.name}
                     </h3>
                     
                     {/* Decorative Divider */}
-                    <div className="w-10 h-[2px] bg-gradient-to-r from-[#F4B400] to-[#FFD54F] rounded-full my-1.5" />
+                    <div className="w-8 md:w-10 h-[2px] bg-gradient-to-r from-[#F4B400] to-[#FFD54F] rounded-full my-1 md:my-1.5" />
 
-                    <p className="text-xs md:text-sm font-semibold text-[#555555] leading-snug">
+                    <p className="text-[10px] md:text-xs lg:text-sm font-semibold text-[#555555] leading-snug">
                       {leader.designation}
                     </p>
                   </div>
@@ -227,61 +227,61 @@ const Home = () => {
         </section>
 
         {/* Main Motto & Sub-title */}
-        <section className="text-center my-6 px-4">
-          <div className="inline-flex items-center gap-3">
-            <span className="text-amber-400 text-xl font-bold">➻</span>
-            <h2 className="text-2xl md:text-4xl font-extrabold text-white tracking-wide drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
+        <section className="text-center my-4 md:my-6 px-4">
+          <div className="inline-flex items-center gap-2 md:gap-3">
+            <span className="text-amber-400 text-lg md:text-xl font-bold">➻</span>
+            <h2 className="text-lg md:text-2xl lg:text-4xl font-extrabold text-white tracking-wide drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
               ప్రజలే దేవుళ్లు.. సేవే మా లక్ష్యం
             </h2>
-            <span className="text-amber-400 text-xl font-bold">➻</span>
+            <span className="text-amber-400 text-lg md:text-xl font-bold">➻</span>
           </div>
-          <p className="text-gray-300 text-base md:text-lg font-medium mt-2 tracking-wide">
+          <p className="text-gray-300 text-sm md:text-base lg:text-lg font-medium mt-2 tracking-wide">
             ప్రజల కోసం ఎల్లప్పుడూ.. ఎప్పటికీ...
           </p>
         </section>
 
         {/* Stat Widgets & Bottom Action Area */}
-        <section className="w-full max-w-6xl mx-auto px-6 mt-4">
+        <section className="w-full max-w-6xl mx-auto px-4 md:px-6 mt-2 md:mt-4">
           <div className="flex justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 max-w-2xl">
             
             {/* Stat Glass Box 1 */}
-            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
-              <div className="flex items-center gap-2 text-[#FFD54F] mb-1">
-                <Users className="w-5 h-5" />
-                <span className="text-xs font-semibold tracking-wide text-gray-200">ప్రజా సేవ</span>
+            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-xl md:rounded-2xl p-3 md:p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
+              <div className="flex items-center gap-1.5 md:gap-2 text-[#FFD54F] mb-1">
+                <Users className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="text-[10px] md:text-xs font-semibold tracking-wide text-gray-200">ప్రజా సేవ</span>
               </div>
-              <span className="text-2xl font-black text-[#F4B400] tracking-wider">24/7</span>
+              <span className="text-xl md:text-2xl font-black text-[#F4B400] tracking-wider">24/7</span>
             </div>
 
             {/* Stat Glass Box 2 */}
-            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
-              <div className="flex items-center gap-2 text-[#FFD54F] mb-1">
-                <Heart className="w-5 h-5" />
-                <span className="text-xs font-semibold tracking-wide text-gray-200">కట్టుబాటు</span>
+            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-xl md:rounded-2xl p-3 md:p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
+              <div className="flex items-center gap-1.5 md:gap-2 text-[#FFD54F] mb-1">
+                <Heart className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="text-[10px] md:text-xs font-semibold tracking-wide text-gray-200">కట్టుబాటు</span>
               </div>
-              <span className="text-2xl font-black text-[#F4B400] tracking-wider">100%</span>
+              <span className="text-xl md:text-2xl font-black text-[#F4B400] tracking-wider">100%</span>
             </div>
 
             {/* Stat Glass Box 3 */}
-            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
-              <div className="flex items-center gap-2 text-[#FFD54F] mb-1">
-                <TrendingUp className="w-5 h-5" />
-                <span className="text-xs font-semibold tracking-wide text-gray-200">మన లక్ష్యం</span>
+            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-xl md:rounded-2xl p-3 md:p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
+              <div className="flex items-center gap-1.5 md:gap-2 text-[#FFD54F] mb-1">
+                <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="text-[10px] md:text-xs font-semibold tracking-wide text-gray-200">మన లక్ష్యం</span>
               </div>
-              <span className="text-xl font-bold text-[#F4B400] tracking-wider">ప్రగతి</span>
+              <span className="text-lg md:text-xl font-bold text-[#F4B400] tracking-wider">ప్రగతి</span>
             </div>
 
             </div>
           </div>
 
           {/* Swipe Scroll Indicator */}
-          <div className="flex flex-col items-center justify-center mt-8 gap-1">
-            <button className="w-10 h-10 rounded-full bg-gradient-to-r from-[#F4B400] to-[#FFD54F] text-black flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
-              <ChevronUp className="w-6 h-6" />
+          <div className="flex flex-col items-center justify-center mt-6 md:mt-8 gap-1">
+            <button className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-[#F4B400] to-[#FFD54F] text-black flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+              <ChevronUp className="w-5 h-5 md:w-6 md:h-6" />
             </button>
-            <span className="text-xs font-medium text-gray-200 tracking-wider">స్వైప్ చేసి చూడండి</span>
-            <span className="text-[10px] text-gray-300">లేటెస్ట్ న్యూస్ / కార్యక్రమాల సమాచారం</span>
+            <span className="text-[10px] md:text-xs font-medium text-gray-200 tracking-wider">స్వైప్ చేసి చూడండి</span>
+            <span className="text-[9px] md:text-[10px] text-gray-300">లేటెస్ట్ న్యూస్ / కార్యక్రమాల సమాచారం</span>
           </div>
         </section>
 
