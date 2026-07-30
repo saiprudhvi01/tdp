@@ -226,42 +226,8 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Stat Widgets & Bottom Action Area */}
+        {/* Swipe Scroll Indicator */}
         <section className="w-full max-w-6xl mx-auto px-4 md:px-6 mt-1 md:mt-2">
-          <div className="flex justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 max-w-2xl">
-            
-            {/* Stat Glass Box 1 */}
-            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-xl md:rounded-2xl p-3 md:p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
-              <div className="flex items-center gap-1.5 md:gap-2 text-[#FFD54F] mb-1">
-                <Users className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="text-[10px] md:text-xs font-semibold tracking-wide text-gray-200">ప్రజా సేవ</span>
-              </div>
-              <span className="text-xl md:text-2xl font-black text-[#F4B400] tracking-wider">24/7</span>
-            </div>
-
-            {/* Stat Glass Box 2 */}
-            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-xl md:rounded-2xl p-3 md:p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
-              <div className="flex items-center gap-1.5 md:gap-2 text-[#FFD54F] mb-1">
-                <Heart className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="text-[10px] md:text-xs font-semibold tracking-wide text-gray-200">కట్టుబాటు</span>
-              </div>
-              <span className="text-xl md:text-2xl font-black text-[#F4B400] tracking-wider">100%</span>
-            </div>
-
-            {/* Stat Glass Box 3 */}
-            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-xl md:rounded-2xl p-3 md:p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
-              <div className="flex items-center gap-1.5 md:gap-2 text-[#FFD54F] mb-1">
-                <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="text-[10px] md:text-xs font-semibold tracking-wide text-gray-200">మన లక్ష్యం</span>
-              </div>
-              <span className="text-lg md:text-xl font-bold text-[#F4B400] tracking-wider">ప్రగతి</span>
-            </div>
-
-            </div>
-          </div>
-
-          {/* Swipe Scroll Indicator */}
           <div className="flex flex-col items-center justify-center mt-6 md:mt-8 gap-1">
             <button className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-[#F4B400] to-[#FFD54F] text-black flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
               <ChevronUp className="w-5 h-5 md:w-6 md:h-6" />
