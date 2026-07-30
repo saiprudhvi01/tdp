@@ -27,6 +27,17 @@ module.exports = {
       backgroundImage: {
         'gradient-gold': 'linear-gradient(135deg, #FFFDF5 0%, #FFF6CC 35%, #FFE066 100%)',
         'glass': 'rgba(255, 255, 255, 0.6)',
+        'gradient-radial': 'radial-gradient(circle, var(--tw-gradient-stops))',
+      },
+      perspective: {
+        '1000': '1000px',
+        '1800': '1800px',
+      },
+      transformStyle: {
+        'preserve-3d': 'preserve-3d',
+      },
+      transform: {
+        'style-3d': 'preserve-3d',
       }
     },
   },

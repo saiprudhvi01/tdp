@@ -24,7 +24,7 @@ function App() {
   return (
     <LanguageProvider>
       <Router>
-        <div className="min-h-screen bg-gradient-gold">
+        <div className="min-h-screen">
           <Header 
             isAdmin={isAdmin} 
             isUser={isUser} 

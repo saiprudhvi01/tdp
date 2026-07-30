@@ -1,262 +1,315 @@
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { Facebook, Twitter, Instagram, Youtube, ChevronLeft, ChevronRight, Users, Building2, Award } from 'lucide-react';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Users, 
+  Heart, 
+  TrendingUp, 
+  ChevronUp, 
+  MessageSquare, 
+  X
+} from 'lucide-react';
 
 const Home = () => {
   const { t } = useLanguage();
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [activeCardIndex, setActiveCardIndex] = useState(2);
+  const [showChat, setShowChat] = useState(true);
 
   // Leaders carousel data
   const leaders = [
     {
       id: 1,
-      name: 'ఎన్. చంద్రబాబు నాయుడు',
-      designation: 'మాజీ ముఖ్యమంత్రి',
-      image: '/bgimages/Cbn Home page Image.png'
-    },
-    {
-      id: 2,
-      name: 'దామచర్ల జనార్దన రావు',
-      designation: 'శాసనసభ్యులు',
-      image: '/bgimages/Damacharla Janardhan.jpeg'
-    },
-    {
-      id: 3,
-      name: 'ఎన్.టి.ఆర్',
-      designation: 'మాజీ ముఖ్యమంత్రి',
+      name: 'శ్రీ N.T. రామారావు',
+      designation: 'తెలుగుదేశం పార్టీ వ్యవస్థాపకులు',
       image: '/bgimages/Sr ntr Home page photo.jpeg'
     },
     {
-      id: 4,
-      name: 'కల్వకుంట్ల ఆంజనేయులు',
-      designation: 'మాజీ మంత్రి',
+      id: 2,
+      name: 'శ్రీ నారా చంద్రబాబు నాయుడు',
+      designation: 'తెలుగుదేశం పార్టీ జాతీయ అధ్యక్షులు',
+      image: '/bgimages/Cbn Home page Image.png'
+    },
+    {
+      id: 3,
+      name: 'శ్రీ దామచర్ల ఆంజనేయులు',
+      designation: 'మాజీ MLA & మహానేత',
       image: '/bgimages/Aanjaneyalu.jpeg'
+    },
+    {
+      id: 4,
+      name: 'దామచర్ల జనార్దన రావు',
+      designation: 'MLA-Ongole constituency',
+      image: '/bgimages/Damacharla Janardhana Rao.jpg.jpeg'
     }
   ];
 
+  // Auto-rotate active card every 5 seconds
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % leaders.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, [leaders.length]);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % leaders.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + leaders.length) % leaders.length);
-  };
+    const interval = setInterval(() => {
+      setActiveCardIndex((prev) => (prev + 1) % 4);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-yellow-50 to-white">
-      {/* Hero Section with Background Image */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image with reduced brightness */}
+    <div className="min-h-screen bg-black text-white relative font-sans overflow-x-hidden">
+      
+      {/* Fixed Background Image */}
+      <div className="fixed inset-0 z-0">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center"
           style={{ 
-            backgroundImage: "url('/bgimages/homenew.png')",
-            filter: 'brightness(0.4)'
+            backgroundImage: "url('/bgimages/homebgnew2.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
           }}
-        ></div>
+        />
+        {/* Overlay for contrast */}
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#F4B400]/20 via-transparent to-[#FFD54F]/10" />
+      </div>
+
+      {/* Main Content Overlay */}
+      <div className="relative z-10 flex flex-col min-h-screen justify-between pb-12">
         
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50"></div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 py-12 w-full">
-          {/* Leaders Carousel */}
-          <div className="relative mb-8">
-            <motion.div
-              key={currentSlide}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.5 }}
-              className="glass-card rounded-2xl overflow-hidden shadow-2xl"
-            >
-              <div className="grid md:grid-cols-2 gap-0">
-                {/* Image Side */}
-                <div className="relative h-80 md:h-96 lg:h-[500px]">
-                  <img
-                    src={leaders[currentSlide].image}
-                    alt={leaders[currentSlide].name}
-                    className="w-full h-full object-cover"
+        {/* Leaders Showcase - Static Grid */}
+        <section className="my-auto py-8 relative w-full min-h-screen flex items-center justify-center px-4">
+          
+          {/* Cards Grid */}
+          <div className="relative z-10 w-full max-w-7xl mx-auto perspective-[1800px]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full" style={{ transformStyle: 'preserve-3d' }}>
+            {leaders.map((leader, index) => {
+              const isActive = index === activeCardIndex;
+              return (
+                <motion.div
+                  key={leader.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: isActive ? 1.12 : 1,
+                    translateZ: isActive ? 80 : 0,
+                    y: isActive ? -30 : 0,
+                    rotateX: isActive ? 0 : -2
+                  }}
+                  transition={{ 
+                    duration: 0.8,
+                    delay: index * 0.1,
+                    ease: [0.25, 0.1, 0.25, 1]
+                  }}
+                  onClick={() => setActiveCardIndex(index)}
+                  className={`cursor-pointer w-full h-[480px] md:h-[520px] rounded-[38px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
+                    ${isActive 
+                      ? 'border-6 border-[#F4B400] shadow-[0_0_50px_rgba(244,180,0,0.8),0_0_100px_rgba(244,180,0,0.5),0_0_150px_rgba(244,180,0,0.3)] z-20' 
+                      : 'border-4 border-white/50 shadow-[0_18px_40px_rgba(0,0,0,0.18)] hover:border-[#F4B400]/70 z-10'
+                    }`}
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  {/* Premium Multi-Layer Glow for Active Card */}
+                  {isActive && (
+                    <>
+                      {/* Outer glow layer 1 */}
+                      <motion.div
+                        className="absolute inset-0 rounded-[38px] -z-10"
+                        animate={{ 
+                          boxShadow: [
+                            '0 0 30px rgba(244, 180, 0, 0.3)',
+                            '0 0 60px rgba(244, 180, 0, 0.5)',
+                            '0 0 30px rgba(244, 180, 0, 0.3)'
+                          ]
+                        }}
+                        transition={{ 
+                          duration: 2.5,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                        style={{
+                          background: 'radial-gradient(circle at center, rgba(244,180,0,0.15) 0%, transparent 60%)'
+                        }}
+                      />
+                      {/* Outer glow layer 2 - different color */}
+                      <motion.div
+                        className="absolute inset-0 rounded-[38px] -z-10"
+                        animate={{ 
+                          boxShadow: [
+                            '0 0 25px rgba(255, 213, 79, 0.25)',
+                            '0 0 50px rgba(255, 213, 79, 0.4)',
+                            '0 0 25px rgba(255, 213, 79, 0.25)'
+                          ]
+                        }}
+                        transition={{ 
+                          duration: 2.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 0.5
+                        }}
+                        style={{
+                          background: 'radial-gradient(circle at center, rgba(255,213,79,0.1) 0%, transparent 50%)'
+                        }}
+                      />
+                      {/* Animated border gradient */}
+                      <motion.div
+                        className="absolute inset-0 rounded-[38px] -z-10"
+                        style={{
+                          background: 'conic-gradient(from 0deg, transparent, #F4B400, transparent, #FFD54F, transparent)',
+                          opacity: 0.3
+                        }}
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      />
+                      {/* Spotlight effect */}
+                      <motion.div
+                        className="absolute inset-0 rounded-[38px] -z-10"
+                        animate={{
+                          background: [
+                            'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)',
+                            'radial-gradient(circle at 70% 70%, rgba(255,255,255,0.3) 0%, transparent 50%)',
+                            'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)'
+                          ]
+                        }}
+                        transition={{
+                          duration: 4,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    </>
+                  )}
+                  {/* 3D Depth/Thickness Effect - Side Face */}
+                  <div 
+                    className="absolute inset-0 rounded-[38px] bg-gradient-to-br from-[#E8E0D0] to-[#D8D0C0] -z-10"
+                    style={{ 
+                      transform: 'translateZ(-15px)',
+                      boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
+                    }} 
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                </div>
+                  
+                  {/* 3D Depth/Thickness Effect - Bottom Face */}
+                  <div 
+                    className="absolute bottom-0 left-0 right-0 h-8 rounded-b-[38px] bg-gradient-to-b from-[#D8D0C0] to-[#C8C0B0] -z-20"
+                    style={{ 
+                      transform: 'translateZ(-15px) translateY(8px)',
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.4)'
+                    }} 
+                  />
+                  
+                  {/* Image Container - photo fills width, cropped at top, no inner box/padding */}
+                  <div className="relative w-full overflow-hidden bg-gradient-to-b from-[#F8F5EE] to-[#F6F1E8]" style={{ height: '380px' }}>
+                    <img
+                      src={leader.image}
+                      alt={leader.name}
+                      className="w-full h-full object-cover"
+                      style={{ objectPosition: 'center top' }}
+                    />
+                    {/* subtle fade at bottom of image into card body */}
+                    <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#FBF8F2] to-transparent" />
+                  </div>
 
-                {/* Content Side */}
-                <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center bg-gradient-to-br from-yellow-100/90 to-yellow-50/90 backdrop-blur-sm">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-                      {leaders[currentSlide].name}
-                    </h2>
-                    <div className="inline-block bg-yellow-400 px-4 py-2 rounded-full mb-6">
-                      <p className="text-lg md:text-xl font-semibold text-gray-900">
-                        {leaders[currentSlide].designation}
-                      </p>
-                    </div>
-                  </motion.div>
-                </div>
+                  {/* Card Content Footer */}
+                  <div className="px-3 pt-2 pb-3 text-center flex flex-col items-center justify-center">
+                    <h3 className="text-base md:text-lg font-black text-[#B22222] tracking-tight leading-tight">
+                      {leader.name}
+                    </h3>
+                    
+                    {/* Decorative Divider */}
+                    <div className="w-10 h-[2px] bg-gradient-to-r from-[#F4B400] to-[#FFD54F] rounded-full my-1.5" />
+
+                    <p className="text-xs md:text-sm font-semibold text-[#555555] leading-snug">
+                      {leader.designation}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
+            </div>
+          </div>
+        </section>
+
+        {/* Main Motto & Sub-title */}
+        <section className="text-center my-6 px-4">
+          <div className="inline-flex items-center gap-3">
+            <span className="text-amber-400 text-xl font-bold">➻</span>
+            <h2 className="text-2xl md:text-4xl font-extrabold text-white tracking-wide drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
+              ప్రజలే దేవుళ్లు.. సేవే మా లక్ష్యం
+            </h2>
+            <span className="text-amber-400 text-xl font-bold">➻</span>
+          </div>
+          <p className="text-gray-300 text-base md:text-lg font-medium mt-2 tracking-wide">
+            ప్రజల కోసం ఎల్లప్పుడూ.. ఎప్పటికీ...
+          </p>
+        </section>
+
+        {/* Stat Widgets & Bottom Action Area */}
+        <section className="w-full max-w-6xl mx-auto px-6 mt-4">
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl">
+            
+            {/* Stat Glass Box 1 */}
+            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
+              <div className="flex items-center gap-2 text-[#FFD54F] mb-1">
+                <Users className="w-5 h-5" />
+                <span className="text-xs font-semibold tracking-wide text-gray-200">ప్రజా సేవ</span>
               </div>
-            </motion.div>
+              <span className="text-2xl font-black text-[#F4B400] tracking-wider">24/7</span>
+            </div>
 
-            {/* Navigation Buttons */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-white/90 hover:bg-yellow-400 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 z-20"
-            >
-              <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 text-gray-900" />
+            {/* Stat Glass Box 2 */}
+            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
+              <div className="flex items-center gap-2 text-[#FFD54F] mb-1">
+                <Heart className="w-5 h-5" />
+                <span className="text-xs font-semibold tracking-wide text-gray-200">కట్టుబాటు</span>
+              </div>
+              <span className="text-2xl font-black text-[#F4B400] tracking-wider">100%</span>
+            </div>
+
+            {/* Stat Glass Box 3 */}
+            <div className="bg-white/10 backdrop-blur-md border border-[#F4B400]/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:border-[#F4B400]/50 transition-all">
+              <div className="flex items-center gap-2 text-[#FFD54F] mb-1">
+                <TrendingUp className="w-5 h-5" />
+                <span className="text-xs font-semibold tracking-wide text-gray-200">మన లక్ష్యం</span>
+              </div>
+              <span className="text-xl font-bold text-[#F4B400] tracking-wider">ప్రగతి</span>
+            </div>
+
+            </div>
+          </div>
+
+          {/* Swipe Scroll Indicator */}
+          <div className="flex flex-col items-center justify-center mt-8 gap-1">
+            <button className="w-10 h-10 rounded-full bg-gradient-to-r from-[#F4B400] to-[#FFD54F] text-black flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+              <ChevronUp className="w-6 h-6" />
             </button>
-            <button
-              onClick={nextSlide}
-              className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-white/90 hover:bg-yellow-400 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 z-20"
+            <span className="text-xs font-medium text-gray-200 tracking-wider">స్వైప్ చేసి చూడండి</span>
+            <span className="text-[10px] text-gray-300">లేటెస్ట్ న్యూస్ / కార్యక్రమాల సమాచారం</span>
+          </div>
+        </section>
+
+      </div>
+
+      {/* Floating Customer Help / Chat Assistant Bubble */}
+      {showChat && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-end gap-3">
+          {/* Chat Tooltip Bubble */}
+          <div className="bg-white text-gray-900 rounded-2xl p-3 px-4 shadow-2xl relative border border-gray-200 text-xs font-medium max-w-[200px]">
+            <button 
+              onClick={() => setShowChat(false)}
+              className="absolute -top-2 -left-2 bg-gray-200 hover:bg-gray-300 rounded-full p-0.5 text-gray-600"
             >
-              <ChevronRight className="w-6 h-6 md:w-8 md:h-8 text-gray-900" />
+              <X className="w-3 h-3" />
             </button>
-
-            {/* Dots */}
-            <div className="flex justify-center mt-6 space-x-3">
-              {leaders.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentSlide ? 'bg-yellow-400 w-10' : 'bg-white/70'
-                  }`}
-                />
-              ))}
-            </div>
+            <p className="font-bold text-gray-800">మీకు ఎలా సహాయం చేయగలం?</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">మాకు మెసేజ్ చేయండి!</p>
           </div>
 
-          {/* Slogan Section */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-            className="text-center"
-          >
-            <div className="bg-yellow-400/95 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-2xl border-4 border-yellow-300">
-              <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
-                -* ప్రజలే దేవుళ్ళు.. సేవే మా లక్ష్యం *-
-              </h2>
-              <p className="text-lg md:text-xl text-gray-800">
-                ప్రజల కోసం ఎల్లప్పుడూ.. ఎప్పటికీ...
-              </p>
-            </div>
-          </motion.div>
+          {/* Floating Action Button */}
+          <button className="w-14 h-14 bg-gradient-to-r from-[#F4B400] to-[#FFD54F] rounded-full flex items-center justify-center shadow-2xl border-2 border-white hover:scale-105 transition-transform relative">
+            <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-red-600 border-2 border-white rounded-full" />
+            <MessageSquare className="w-7 h-7 text-black fill-black" />
+          </button>
         </div>
-      </section>
+      )}
 
-      {/* Statistics Section */}
-      <section className="py-16 px-4 bg-gradient-to-b from-yellow-50 to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Stat Box 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl p-8 shadow-xl border-4 border-yellow-300 hover:border-yellow-400 transition-all duration-300 hover:scale-105"
-            >
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <Users className="w-8 h-8 text-gray-900" />
-                </div>
-              </div>
-              <h3 className="text-4xl md:text-5xl font-bold text-gray-900 text-center mb-2">50,000+</h3>
-              <p className="text-lg text-gray-700 text-center font-medium">ప్రజల సేవ</p>
-            </motion.div>
-
-            {/* Stat Box 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="bg-white rounded-2xl p-8 shadow-xl border-4 border-yellow-300 hover:border-yellow-400 transition-all duration-300 hover:scale-105"
-            >
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <Building2 className="w-8 h-8 text-gray-900" />
-                </div>
-              </div>
-              <h3 className="text-4xl md:text-5xl font-bold text-gray-900 text-center mb-2">100+</h3>
-              <p className="text-lg text-gray-700 text-center font-medium">అభివృద్ధి కార్యక్రమాలు</p>
-            </motion.div>
-
-            {/* Stat Box 3 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="bg-white rounded-2xl p-8 shadow-xl border-4 border-yellow-300 hover:border-yellow-400 transition-all duration-300 hover:scale-105"
-            >
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <Award className="w-8 h-8 text-gray-900" />
-                </div>
-              </div>
-              <h3 className="text-4xl md:text-5xl font-bold text-gray-900 text-center mb-2">15+</h3>
-              <p className="text-lg text-gray-700 text-center font-medium">సంవత్సరాల సేవ</p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gradient-to-br from-yellow-200/90 via-yellow-300/85 to-yellow-200/90 backdrop-blur-lg border-t border-primary-yellow/30 py-8 mt-8">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            {/* Logo and Party Name */}
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-primary-yellow rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-xl">🚲</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900">తెలుగుదేశం పార్టీ</h3>
-                <p className="text-xs text-gray-600">Telugu Desam Party</p>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div className="flex items-center space-x-6 text-sm">
-              <a href="#" className="text-gray-700 hover:text-primary-yellow transition-colors font-medium">Contact</a>
-              <a href="#" className="text-gray-700 hover:text-primary-yellow transition-colors font-medium">About</a>
-              <a href="#" className="text-gray-700 hover:text-primary-yellow transition-colors font-medium">Privacy</a>
-            </div>
-
-            {/* Social Icons */}
-            <div className="flex items-center space-x-4">
-              <a href="#" className="w-9 h-9 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-primary-yellow transition-all duration-300 shadow-md hover:shadow-lg">
-                <Facebook className="w-4 h-4 text-gray-700" />
-              </a>
-              <a href="#" className="w-9 h-9 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-primary-yellow transition-all duration-300 shadow-md hover:shadow-lg">
-                <Twitter className="w-4 h-4 text-gray-700" />
-              </a>
-              <a href="#" className="w-9 h-9 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-primary-yellow transition-all duration-300 shadow-md hover:shadow-lg">
-                <Instagram className="w-4 h-4 text-gray-700" />
-              </a>
-            </div>
-          </div>
-
-          {/* Copyright */}
-          <div className="mt-6 pt-6 border-t border-primary-yellow/20 text-center">
-            <p className="text-xs text-gray-600">
-              &copy; 2024 Damacharla Janardhana Rao. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

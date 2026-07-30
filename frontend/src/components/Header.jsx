@@ -1,12 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { Bike, Calendar, FileText, Globe, Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, ListOrdered, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Header = ({ isAdmin, isUser, setIsAdmin, setIsUser }) => {
   const { t, toggleLanguage, language } = useLanguage();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -20,173 +18,141 @@ const Header = ({ isAdmin, isUser, setIsAdmin, setIsUser }) => {
     navigate('/');
   };
 
-  const navItems = [
-    { icon: Bike, label: t('home'), path: '/' },
-    { icon: Calendar, label: t('schedules'), path: '/schedules' },
-    { icon: FileText, label: t('status'), path: '/status' },
-  ];
-
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm"
+      className="bg-black/90 backdrop-blur-md border-b border-amber-500/20 sticky top-0 z-50 text-white shadow-xl"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo and Name */}
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-primary-yellow rounded-full flex items-center justify-center shadow-lg">
-              <Bike className="w-6 h-6 md:w-7 md:h-7 text-text-primary" />
+        <div className="flex items-center justify-between h-20">
+          
+          {/* Left: Logo and Name */}
+          <Link to="/" className="flex items-center space-x-3 group">
+            {/* Bicycle Icon Badge */}
+            <div className="w-12 h-12 md:w-14 md:h-14 bg-amber-400 rounded-full flex items-center justify-center p-2 shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300">
+              <svg 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="w-7 h-7 text-black"
+              >
+                <circle cx="5.5" cy="17.5" r="3.5" />
+                <circle cx="18.5" cy="17.5" r="3.5" />
+                <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                <path d="M12 17.5V14l-3-3 4-3 2 3h3" />
+              </svg>
             </div>
-            <div className="hidden sm:block">
-              <h1 className="text-lg md:text-xl font-bold text-text-primary">
-                {t('mlaName')}
+
+            {/* Title & Red Constituency Subtitle */}
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white leading-snug">
+                {t('mlaName') || 'దామచర్ల జనార్దన రావు'}
               </h1>
-              <p className="text-xs md:text-sm text-text-secondary">
-                {t('constituency')}
+              <p className="text-sm font-semibold text-red-500 tracking-wide">
+                {t('constituency') || 'MLA - [నియోజకవర్గం పేరు]'}
               </p>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className="flex items-center space-x-2 text-text-secondary hover:text-primary-yellow transition-colors duration-300 group"
-              >
-                <item.icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span className="font-medium">{item.label}</span>
-              </Link>
-            ))}
-          </nav>
-
-          {/* Right Side Actions */}
-          <div className="flex items-center space-x-3 md:space-x-4">
-            {/* Dashboard Link */}
+          {/* Right: Actions and Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-5">
+            
+            {/* Dashboard Link (Admin / User) */}
             {(isAdmin || isUser) && (
               <Link
                 to={isAdmin ? '/admin/dashboard' : '/user/dashboard'}
-                className="hidden md:flex items-center space-x-2 px-3 py-2 bg-primary-yellow/10 hover:bg-primary-yellow/20 rounded-xl transition-all duration-300"
+                className="flex items-center space-x-1.5 px-3 py-1.5 bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 rounded-lg text-sm font-medium transition-colors"
               >
-                <LayoutDashboard className="w-4 h-4 text-primary-yellow" />
-                <span className="text-sm font-semibold text-text-primary">
-                  {t('dashboard')}
-                </span>
+                <LayoutDashboard className="w-4 h-4" />
+                <span>{t('dashboard')}</span>
               </Link>
             )}
 
-            {/* User Info */}
+            {/* User Badge */}
             {(isAdmin || isUser) && (
-              <div className="hidden md:flex items-center space-x-2 px-3 py-2 bg-white/50 rounded-xl">
-                <div className="w-8 h-8 bg-primary-yellow rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-text-primary" />
-                </div>
-                <span className="text-sm font-medium text-text-primary">
-                  {isAdmin ? 'Admin' : 'User'}
-                </span>
+              <div className="flex items-center space-x-2 px-3 py-1.5 bg-white/10 rounded-lg text-sm font-medium">
+                <User className="w-4 h-4 text-amber-400" />
+                <span>{isAdmin ? 'Admin' : 'User'}</span>
               </div>
             )}
 
             {/* Logout Button */}
             {(isAdmin || isUser) && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <button
                 onClick={handleLogout}
-                className="hidden md:flex items-center space-x-2 px-3 py-2 bg-red-100 hover:bg-red-200 rounded-xl transition-all duration-300"
+                className="flex items-center space-x-1 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg text-sm font-medium transition-colors"
               >
-                <LogOut className="w-4 h-4 text-red-600" />
-                <span className="text-sm font-semibold text-red-600">
-                  {t('logout')}
-                </span>
-              </motion.button>
+                <LogOut className="w-4 h-4" />
+                <span>{t('logout')}</span>
+              </button>
             )}
 
-            {/* Language Toggle */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleLanguage}
-              className="flex items-center space-x-2 px-3 py-2 md:px-4 md:py-2 bg-primary-yellow/10 hover:bg-primary-yellow/20 rounded-xl transition-all duration-300"
-            >
-              <Globe className="w-4 h-4 md:w-5 md:h-5 text-primary-yellow" />
-              <span className="text-sm md:text-base font-semibold text-text-primary">
-                {language === 'en' ? 'తెలుగు' : 'English'}
-              </span>
-            </motion.button>
+            {/* Separator Divider */}
+            <div className="h-6 w-px bg-white/20" />
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            {/* Status Link */}
+            <Link
+              to="/status"
+              className="flex items-center space-x-2 text-white hover:text-amber-400 font-semibold text-sm transition-colors group"
             >
-              {isMenuOpen ? (
-                <X className="w-6 h-6 text-text-primary" />
-              ) : (
-                <Menu className="w-6 h-6 text-text-primary" />
-              )}
+              <ListOrdered className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
+              <span>{t('status') || 'స్టేటస్'}</span>
+            </Link>
+
+            {/* Separator Divider */}
+            <div className="h-6 w-px bg-white/20" />
+
+            {/* Schedules Link */}
+            <Link
+              to="/schedules"
+              className="flex items-center space-x-2 text-white hover:text-amber-400 font-semibold text-sm transition-colors group"
+            >
+              <Calendar className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
+              <span>{t('schedules') || 'షెడ్యూల్'}</span>
+            </Link>
+
+            {/* Separator Divider */}
+            <div className="h-6 w-px bg-white/20" />
+
+            {/* Language Capsule Switcher */}
+            <div className="border border-white/20 bg-black/50 rounded-full p-1 flex items-center">
+              <button
+                onClick={() => language !== 'te' && toggleLanguage()}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 ${
+                  language === 'te'
+                    ? 'bg-amber-400 text-black shadow-md'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                తెలుగు
+              </button>
+              <button
+                onClick={() => language !== 'en' && toggleLanguage()}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 ${
+                  language === 'en'
+                    ? 'bg-amber-400 text-black shadow-md'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                English
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Right Controls */}
+          <div className="flex items-center space-x-3 md:hidden">
+            {/* Language Switcher for Mobile */}
+            <button
+              onClick={toggleLanguage}
+              className="px-2.5 py-1 bg-amber-400 text-black text-xs font-bold rounded-md"
+            >
+              {language === 'en' ? 'తెలుగు' : 'EN'}
             </button>
           </div>
-        </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden py-4 border-t border-gray-200"
-            >
-              <nav className="flex flex-col space-y-3">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-primary-yellow/10 transition-colors"
-                  >
-                    <item.icon className="w-5 h-5 text-primary-yellow" />
-                    <span className="font-medium text-text-primary">{item.label}</span>
-                  </Link>
-                ))}
-                {(isAdmin || isUser) && (
-                  <>
-                    <Link
-                      to={isAdmin ? '/admin/dashboard' : '/user/dashboard'}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-primary-yellow/10 transition-colors"
-                    >
-                      <LayoutDashboard className="w-5 h-5 text-primary-yellow" />
-                      <span className="font-medium text-text-primary">{t('dashboard')}</span>
-                    </Link>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setIsMenuOpen(false);
-                      }}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-red-100 transition-colors"
-                    >
-                      <LogOut className="w-5 h-5 text-red-600" />
-                      <span className="font-medium text-red-600">{t('logout')}</span>
-                    </button>
-                  </>
-                )}
-              </nav>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Quotes Bar */}
-      <div className="bg-primary-yellow/20 border-y border-primary-yellow/30 py-2">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-sm md:text-base font-medium text-text-primary">
-            {t('quote1')} • {t('quote2')}
-          </p>
         </div>
       </div>
     </motion.header>
