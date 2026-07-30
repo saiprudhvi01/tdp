@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { Calendar, ListOrdered, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Calendar, ListOrdered, User, LogOut, LayoutDashboard, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Header = ({ isAdmin, isUser, setIsAdmin, setIsUser }) => {
@@ -90,6 +90,18 @@ const Header = ({ isAdmin, isUser, setIsAdmin, setIsUser }) => {
                 <span>{t('logout')}</span>
               </button>
             )}
+
+            {/* Separator Divider */}
+            <div className="h-6 w-px bg-white/20" />
+
+            {/* Home Link */}
+            <Link
+              to="/"
+              className="flex items-center space-x-2 text-white hover:text-amber-400 font-semibold text-sm transition-colors group"
+            >
+              <Home className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
+              <span>{t('home') || 'హోమ్'}</span>
+            </Link>
 
             {/* Separator Divider */}
             <div className="h-6 w-px bg-white/20" />
