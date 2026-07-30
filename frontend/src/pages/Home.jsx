@@ -79,7 +79,7 @@ const Home = () => {
           
           {/* Cards Grid */}
           <div className="relative z-10 w-full max-w-7xl mx-auto perspective-[1800px]">
-            <div className="grid grid-cols-4 gap-2 md:gap-5 w-full" style={{ transformStyle: 'preserve-3d' }}>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 w-full" style={{ transformStyle: 'preserve-3d' }}>
             {leaders.map((leader, index) => {
               const isActive = index === activeCardIndex;
               return (
@@ -99,7 +99,7 @@ const Home = () => {
                     ease: [0.25, 0.1, 0.25, 1]
                   }}
                   onClick={() => setActiveCardIndex(index)}
-                  className={`cursor-pointer w-full h-[140px] sm:h-[150px] md:h-[160px] lg:h-[170px] rounded-[16px] md:rounded-[20px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
+                  className={`cursor-pointer w-full h-[350px] sm:h-[380px] md:h-[420px] lg:h-[450px] rounded-[24px] md:rounded-[32px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
                     ${isActive 
                       ? 'border-4 md:border-5 border-[#F4B400] shadow-[0_0_30px_rgba(244,180,0,0.6),0_0_60px_rgba(244,180,0,0.4),0_0_90px_rgba(244,180,0,0.2)] z-20' 
                       : 'border-3 md:border-4 border-white/50 shadow-[0_18px_40px_rgba(0,0,0,0.18)] hover:border-[#F4B400]/70 z-10'
@@ -111,7 +111,7 @@ const Home = () => {
                     <>
                       {/* Outer glow layer 1 */}
                       <motion.div
-                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
+                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
                         animate={{ 
                           boxShadow: [
                             '0 0 30px rgba(244, 180, 0, 0.3)',
@@ -130,7 +130,7 @@ const Home = () => {
                       />
                       {/* Outer glow layer 2 - different color */}
                       <motion.div
-                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
+                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
                         animate={{ 
                           boxShadow: [
                             '0 0 25px rgba(255, 213, 79, 0.25)',
@@ -150,7 +150,7 @@ const Home = () => {
                       />
                       {/* Animated border gradient */}
                       <motion.div
-                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
+                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
                         style={{
                           background: 'conic-gradient(from 0deg, transparent, #F4B400, transparent, #FFD54F, transparent)',
                           opacity: 0.3
@@ -160,7 +160,7 @@ const Home = () => {
                       />
                       {/* Spotlight effect */}
                       <motion.div
-                        className="absolute inset-0 rounded-[16px] md:rounded-[20px] -z-10"
+                        className="absolute inset-0 rounded-[24px] md:rounded-[32px] -z-10"
                         animate={{
                           background: [
                             'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)',
