@@ -19,7 +19,7 @@ router.post('/user/login', async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id, role: 'user', userName: user.name },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'tdp-secret-key-2024',
       { expiresIn: '7d' }
     );
 
@@ -60,7 +60,7 @@ router.post('/user/register', async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id, role: 'user', userName: user.name },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'tdp-secret-key-2024',
       { expiresIn: '7d' }
     );
 
@@ -96,7 +96,7 @@ router.post('/admin/login', async (req, res) => {
 
     const token = jwt.sign(
       { adminId: admin._id, role: 'admin', userName: admin.name },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'tdp-secret-key-2024',
       { expiresIn: '7d' }
     );
 
