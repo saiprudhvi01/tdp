@@ -79,7 +79,7 @@ const Home = () => {
           
           {/* Cards Grid */}
           <div className="relative z-10 w-full max-w-7xl mx-auto perspective-[1800px]">
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 w-full" style={{ transformStyle: 'preserve-3d' }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 w-full" style={{ transformStyle: 'preserve-3d' }}>
             {leaders.map((leader, index) => {
               const isActive = index === activeCardIndex;
               return (
