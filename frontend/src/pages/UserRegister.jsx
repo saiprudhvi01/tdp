@@ -20,7 +20,7 @@ const UserRegister = () => {
     e.preventDefault();
     
     try {
-      const response = await fetch('http://localhost:5000/api/auth/user/register', {
+      const response = await fetch('/api/auth/user/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
