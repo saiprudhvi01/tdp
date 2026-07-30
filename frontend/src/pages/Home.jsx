@@ -226,20 +226,6 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Main Motto & Sub-title */}
-        <section className="text-center my-2 md:my-4 px-4">
-          <div className="inline-flex items-center gap-2 md:gap-3">
-            <span className="text-amber-400 text-lg md:text-xl font-bold">➻</span>
-            <h2 className="text-lg md:text-2xl lg:text-4xl font-extrabold text-white tracking-wide drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
-              ప్రజలే దేవుళ్లు.. సేవే మా లక్ష్యం
-            </h2>
-            <span className="text-amber-400 text-lg md:text-xl font-bold">➻</span>
-          </div>
-          <p className="text-gray-300 text-sm md:text-base lg:text-lg font-medium mt-2 tracking-wide">
-            ప్రజల కోసం ఎల్లప్పుడూ.. ఎప్పటికీ...
-          </p>
-        </section>
-
         {/* Stat Widgets & Bottom Action Area */}
         <section className="w-full max-w-6xl mx-auto px-4 md:px-6 mt-1 md:mt-2">
           <div className="flex justify-center">
