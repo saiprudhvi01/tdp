@@ -78,7 +78,7 @@ const Home = () => {
         <section className="py-2 md:py-4 relative w-full flex items-center justify-center px-4">
           
           {/* Cards Grid */}
-          <div className="relative z-10 w-full max-w-[80%] mx-auto perspective-[1800px]">
+          <div className="relative z-10 w-full max-w-[73%] mx-auto perspective-[1800px]">
             <div className="grid grid-cols-4 gap-2 md:gap-4 w-full" style={{ transformStyle: 'preserve-3d' }}>
             {leaders.map((leader, index) => {
               const isActive = index === activeCardIndex;
