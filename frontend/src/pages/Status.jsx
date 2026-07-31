@@ -76,8 +76,10 @@ const Status = ({ isAdmin, isUser }) => {
   const fetchStatuses = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(API_BASE);
-      if (res.data && res.data.length > 0) {
+      const res = await axios.get(API_BASE, { timeout: 4000 });
+      if (Array.isArray(res.data) && res.data.length > 0) {
+        setStatuses(res.data);
+      } else if (Array.isArray(res.data)) {
         setStatuses(res.data);
       } else {
         setStatuses(defaultStatuses);
@@ -94,8 +96,10 @@ const Status = ({ isAdmin, isUser }) => {
     fetchStatuses();
   }, []);
 
-  // Filtered Statuses
-  const filteredStatuses = statuses.filter(item => {
+  // Filtered Statuses (defensive array check)
+  const safeStatuses = Array.isArray(statuses) ? statuses : defaultStatuses;
+  const filteredStatuses = safeStatuses.filter(item => {
+    if (!item) return false;
     if (filterType === 'all') return true;
     return item.type === filterType;
   });

@@ -28,6 +28,7 @@ const Home = () => {
   const [activeNewsIndex, setActiveNewsIndex] = useState(0);
   const [carouselPosition, setCarouselPosition] = useState(0);
   const topSectionRef = useRef(null);
+  const newsSectionRef = useRef(null);
 
   // Leaders carousel data
   const leaders = [
@@ -320,29 +321,29 @@ const Home = () => {
             })}
             </div>
 
-            {/* Swipe Scroll Indicator - Scrolls to TOP with header offset */}
+            {/* Swipe Scroll Indicator - Scrolls DOWN to News section */}
             <div 
-              onClick={() => topSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => newsSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
               className="flex flex-col items-center justify-center mt-3 sm:mt-4 gap-1 cursor-pointer group"
             >
               <button 
                 onClick={(e) => {
                   e.stopPropagation();
-                  topSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                  newsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
                 }}
                 className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-r from-[#F4B400] to-[#FFD54F] text-black flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform cursor-pointer"
-                title="పైనకి స్క్రోల్ చేయండి"
+                title="లేటెస్ట్ న్యూస్ వైపు స్క్రోల్ చేయండి"
               >
-                <ChevronUp className="w-5 h-5 sm:w-6 sm:h-6" />
+                <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 animate-bounce" />
               </button>
-              <span className="text-[10px] sm:text-xs md:text-xs font-semibold text-gray-200 tracking-wider group-hover:text-amber-400 transition-colors">పైకి స్క్రోల్ చేయండి (Swipe Up)</span>
+              <span className="text-[10px] sm:text-xs md:text-xs font-semibold text-gray-200 tracking-wider group-hover:text-amber-400 transition-colors">కిందికి స్క్రోల్ చేయండి (Scroll Down)</span>
               <span className="text-[9px] sm:text-[10px] md:text-xs text-gray-300">లేటెస్ట్ న్యూస్ / కార్యక్రమాల సమాచారం</span>
             </div>
           </div>
         </section>
 
         {/* News Carousel Section - Full Width */}
-        <section className="w-full py-6 sm:py-8 md:py-12 mt-2 md:mt-6 bg-gradient-to-b from-[#FFF8E7] to-[#FFF9EB]">
+        <section ref={newsSectionRef} className="w-full py-6 sm:py-8 md:py-12 mt-2 md:mt-6 bg-gradient-to-b from-[#FFF8E7] to-[#FFF9EB]">
           {/* Section Heading */}
           <div className="text-center mb-4 md:mb-6 px-4">
             <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-2 md:mb-3">
