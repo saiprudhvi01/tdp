@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,44 +20,23 @@ const UserDashboard = ({ setIsUser }) => {
   const [showNewComplaint, setShowNewComplaint] = useState(false);
   const [currentUserId] = useState('user1'); // Simulate logged-in user ID
 
-  const [complaints, setComplaints] = useState([
-    {
-      id: 1,
-      userId: 'user1',
-      subject: 'రోడ్డు నిర్మాణం',
-      description: 'మన గ్రామంలో ప్రధాన రోడ్డు చాలా చెడుగా ఉంది, దయచేసి పరిష్కరించండి',
-      category: 'roads',
-      village: 'కొండేపి',
-      status: 'pending',
-      createdAt: '2024-01-25',
-      response: '',
-      respondedAt: ''
-    },
-    {
-      id: 2,
-      userId: 'user1',
-      subject: 'తాగునీటి సమస్య',
-      description: 'మన ప్రాంతంలో తాగునీరు లేదు, దయచేసి ఏర్పాటు చేయండి',
-      category: 'water',
-      village: 'మార్కాపురం',
-      status: 'resolved',
-      createdAt: '2024-01-20',
-      response: 'మీ ఫిర్యాదును స్వీకరించాము. నీటి సమస్య పరిష్కారం కోసం అధికారులతో సమాలోచిస్తున్నాము.',
-      respondedAt: '2024-01-22'
-    },
-    {
-      id: 3,
-      userId: 'user2',
-      subject: 'విద్యార్థుల సమస్య',
-      description: 'పాఠశాలలో సరైన సౌకర్యాలు లేవు',
-      category: 'education',
-      village: 'ఒంగోలు',
-      status: 'pending',
-      createdAt: '2024-01-26',
-      response: '',
-      respondedAt: ''
+  const [complaints, setComplaints] = useState([]);
+
+  const fetchComplaints = async () => {
+    try {
+      const response = await fetch('/api/complaints');
+      if (response.ok) {
+        const data = await response.json();
+        setComplaints(data);
+      }
+    } catch (error) {
+      console.error('Error fetching complaints:', error);
     }
-  ]);
+  };
+
+  useEffect(() => {
+    fetchComplaints();
+  }, []);
 
   const [newComplaint, setNewComplaint] = useState({
     subject: '',
@@ -68,29 +47,47 @@ const UserDashboard = ({ setIsUser }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('userToken');
+    localStorage.removeItem('userData');
     setIsUser(false);
     navigate('/');
   };
 
-  const handleSubmitComplaint = (e) => {
+  const handleSubmitComplaint = async (e) => {
     e.preventDefault();
-    const complaint = {
-      id: complaints.length + 1,
-      userId: currentUserId,
-      ...newComplaint,
-      status: 'pending',
-      createdAt: new Date().toISOString().split('T')[0],
-      response: '',
-      respondedAt: ''
-    };
-    setComplaints([...complaints, complaint]);
-    setNewComplaint({
-      subject: '',
-      description: '',
-      category: 'other',
-      village: ''
-    });
-    setShowNewComplaint(false);
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    const token = localStorage.getItem('userToken');
+    try {
+      const response = await fetch('/api/complaints', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          ...newComplaint,
+          userName: userData.name || userData.email || 'పౌరుడు (User)',
+          userId: userData._id || currentUserId
+        }),
+      });
+
+      if (response.ok) {
+        const created = await response.json();
+        setComplaints([created, ...complaints]);
+        setNewComplaint({
+          subject: '',
+          description: '',
+          category: 'other',
+          village: ''
+        });
+        setShowNewComplaint(false);
+        alert('ఫిర్యాదు విజయవంతంగా నమోదైంది! (Complaint registered successfully!)');
+      } else {
+        alert('ఫిర్యాదు నమోదు వైఫల్యం. దయచేసి మళ్ళీ ప్రయత్నించండి.');
+      }
+    } catch (error) {
+      console.error('Error submitting complaint:', error);
+      alert('సర్వర్ లోపం. (Server error)');
+    }
   };
 
   const getStatusColor = (status) => {
@@ -115,33 +112,6 @@ const UserDashboard = ({ setIsUser }) => {
 
   return (
     <div className="min-h-screen bg-gradient-gold">
-      {/* Header */}
-      <div className="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-text-primary">{t('welcome')}</h1>
-              <p className="text-text-secondary text-sm">{t('dashboard')}</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/')}
-                className="flex items-center space-x-2 px-4 py-2 bg-primary-yellow/10 hover:bg-primary-yellow/20 rounded-xl transition-all"
-              >
-                <Home className="w-5 h-5" />
-                <span className="hidden sm:inline">{t('home')}</span>
-              </button>
-              <button
-                onClick={handleLogout}
-                className="flex items-center space-x-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-xl transition-all"
-              >
-                <LogOut className="w-5 h-5" />
-                <span className="hidden sm:inline">{t('logout')}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tabs */}
@@ -194,16 +164,16 @@ const UserDashboard = ({ setIsUser }) => {
               </div>
 
               {/* Complaints List */}
-              {complaints.filter(c => c.userId === currentUserId).length === 0 ? (
+              {complaints.length === 0 ? (
                 <div className="glass-card p-12 text-center">
                   <MessageSquare className="w-16 h-16 text-text-light mx-auto mb-4" />
                   <p className="text-text-secondary">{t('noData')}</p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {complaints.filter(c => c.userId === currentUserId).map((complaint) => (
+                  {complaints.map((complaint) => (
                     <motion.div
-                      key={complaint.id}
+                      key={complaint._id || complaint.id}
                       whileHover={{ scale: 1.01 }}
                       className="glass-card p-6"
                     >

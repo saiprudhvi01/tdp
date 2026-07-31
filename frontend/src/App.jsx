@@ -13,13 +13,16 @@ import FloatingChat from './components/FloatingChat';
 import { useState, useEffect } from 'react';
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isUser, setIsUser] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(() => !!localStorage.getItem('adminToken'));
+  const [isUser, setIsUser] = useState(() => !!localStorage.getItem('userToken'));
 
   useEffect(() => {
     setIsAdmin(!!localStorage.getItem('adminToken'));
     setIsUser(!!localStorage.getItem('userToken'));
   }, []);
+
+  const checkAdminAuth = () => isAdmin || !!localStorage.getItem('adminToken');
+  const checkUserAuth = () => isUser || !!localStorage.getItem('userToken');
 
   return (
     <LanguageProvider>
@@ -35,16 +38,16 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/schedules" element={<Schedules />} />
             <Route path="/status" element={<Status isAdmin={isAdmin} isUser={isUser} />} />
-            <Route path="/user/login" element={<UserLogin setIsUser={setIsUser} />} />
+            <Route path="/user/login" element={<UserLogin setIsUser={setIsUser} setIsAdmin={setIsAdmin} />} />
             <Route path="/user/register" element={<UserRegister />} />
-            <Route path="/admin/login" element={<AdminLogin setIsAdmin={setIsAdmin} />} />
+            <Route path="/admin/login" element={<AdminLogin setIsAdmin={setIsAdmin} setIsUser={setIsUser} />} />
             <Route
               path="/admin/dashboard"
-              element={isAdmin ? <AdminDashboard setIsAdmin={setIsAdmin} /> : <Navigate to="/admin/login" />}
+              element={checkAdminAuth() ? <AdminDashboard setIsAdmin={setIsAdmin} /> : <Navigate to="/admin/login" replace />}
             />
             <Route
               path="/user/dashboard"
-              element={isUser ? <UserDashboard setIsUser={setIsUser} /> : <Navigate to="/user/login" />}
+              element={checkUserAuth() ? <UserDashboard setIsUser={setIsUser} /> : <Navigate to="/user/login" replace />}
             />
           </Routes>
           <FloatingChat isAdmin={isAdmin} isUser={isUser} />

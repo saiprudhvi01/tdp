@@ -1,45 +1,72 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
-import { ArrowRight, User } from 'lucide-react';
+import { User, Lock, Eye, EyeOff } from 'lucide-react';
 
-const UserLogin = ({ setIsUser }) => {
+const UserLogin = ({ setIsUser, setIsAdmin }) => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const [loginAs, setLoginAs] = useState('user');
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
+    identifier: '',
     password: ''
   });
 
+  useEffect(() => {
+    if (localStorage.getItem('userToken')) {
+      if (setIsUser) setIsUser(true);
+      navigate('/user/dashboard', { replace: true });
+    }
+  }, [navigate, setIsUser]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const email = formData.email.trim();
+
+    const identifier = formData.identifier.trim();
     const password = formData.password.trim();
-    
-    try {
-      const response = await fetch('/api/auth/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('userToken', data.token);
-        localStorage.setItem('userData', JSON.stringify(data.user));
-        setIsUser(true);
-        navigate('/user/dashboard');
-      } else {
-        alert(data.message || 'Invalid credentials');
+    if (loginAs === 'admin') {
+      try {
+        const response = await fetch('/api/auth/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: identifier, password }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          localStorage.setItem('adminToken', data.token);
+          localStorage.setItem('adminData', JSON.stringify(data.admin));
+          if (setIsAdmin) setIsAdmin(true);
+          navigate('/admin/dashboard', { replace: true });
+        } else {
+          alert(data.message || 'Invalid admin credentials');
+        }
+      } catch (error) {
+        console.error('Admin login error:', error);
+        alert('Server error. Please try again.');
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Server error. Please try again.');
+    } else {
+      try {
+        const response = await fetch('/api/auth/user/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: identifier, password }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          localStorage.setItem('userToken', data.token);
+          localStorage.setItem('userData', JSON.stringify(data.user));
+          if (setIsUser) setIsUser(true);
+          navigate('/user/dashboard', { replace: true });
+        } else {
+          alert(data.message || 'Invalid user credentials');
+        }
+      } catch (error) {
+        console.error('User login error:', error);
+        alert('Server error. Please try again.');
+      }
     }
   };
 
@@ -51,9 +78,9 @@ const UserLogin = ({ setIsUser }) => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-70px)] h-auto flex items-center justify-center px-4 py-3 sm:py-6 relative overflow-hidden">
-      {/* Background image with opacity 50% */}
-      <div className="absolute inset-0 z-0 -z-10">
+    <div className="h-[calc(100vh-70px)] max-h-[calc(100vh-70px)] w-full flex items-center justify-center px-4 overflow-hidden relative">
+      {/* Background image with 50% opacity */}
+      <div className="absolute inset-0 z-0 -z-10 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center blur-sm opacity-50"
           style={{
@@ -65,94 +92,145 @@ const UserLogin = ({ setIsUser }) => {
             opacity: 0.5
           }}
         ></div>
-        {/* Light overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/20"></div>
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/15 via-transparent to-black/25"></div>
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black/15 via-transparent to-black/25" />
       </div>
 
+      {/* Main Login Card Box - Perfectly Centered Up and Down */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4 }}
-        className="relative z-10 w-full max-w-sm sm:max-w-md my-auto"
+        transition={{ duration: 0.3 }}
+        className="relative z-10 w-full max-w-[340px] sm:max-w-[390px] mx-auto my-auto overflow-hidden"
       >
-        <div className="glass-card p-5 sm:p-7 md:p-8">
-          {/* Logo & Title */}
-          <div className="text-center mb-4 sm:mb-6">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-lg border-2 border-primary-yellow">
-              <User className="w-6 h-6 sm:w-7 sm:h-7 text-black" />
-            </div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-1 leading-tight">
-              {t('welcomeBack')}
+        <div className="bg-white rounded-[24px] shadow-2xl p-4 sm:p-6 border border-amber-100/60">
+          
+          {/* Top TDP Emblem */}
+          <div className="flex justify-center mb-1.5 sm:mb-2">
+            <img
+              src="/bgimages/tdplogo.png"
+              alt="TDP Symbol"
+              className="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-md"
+            />
+          </div>
+
+          {/* Header Title & Subtitle */}
+          <div className="text-center mb-2.5 sm:mb-3">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-[#111111] leading-tight">
+              Welcome Back
             </h1>
-            <p className="text-xs sm:text-sm text-gray-200">{t('pleaseLogin')}</p>
+            <p className="text-[11px] sm:text-xs font-medium text-gray-500 mt-0.5">
+              Login to your account to continue
+            </p>
+            
+            {/* Yellow Dot Divider */}
+            <div className="flex items-center justify-center gap-2 mt-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#F5BE18]" />
+            </div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-2 sm:space-y-2.5">
+            {/* Username or Email Field */}
             <div>
-              <label className="block text-xs sm:text-sm font-semibold text-white mb-1">
-                {t('email')}
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="glass-input w-full text-black placeholder-gray-700 py-2 px-3 text-xs sm:text-sm"
-                placeholder="your@email.com"
-              />
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 focus-within:border-[#F5BE18] focus-within:ring-2 focus-within:ring-[#F5BE18]/20 bg-white transition-all shadow-sm">
+                <User className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <input
+                  type="text"
+                  name="identifier"
+                  value={formData.identifier}
+                  onChange={handleChange}
+                  required
+                  className="w-full text-xs sm:text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent font-medium"
+                  placeholder="Username or Email"
+                />
+              </div>
             </div>
 
+            {/* Password Field */}
             <div>
-              <label className="block text-xs sm:text-sm font-semibold text-white mb-1">
-                {t('password')}
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                className="glass-input w-full text-black placeholder-gray-700 py-2 px-3 text-xs sm:text-sm"
-                placeholder="••••••••"
-              />
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 focus-within:border-[#F5BE18] focus-within:ring-2 focus-within:ring-[#F5BE18]/20 bg-white transition-all shadow-sm">
+                <Lock className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className="w-full text-xs sm:text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent font-medium"
+                  placeholder="Password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+
+              {/* Forgot Password Link */}
+              <div className="text-right mt-1">
+                <button
+                  type="button"
+                  onClick={() => alert('దయచేసి పాస్‌వర్డ్ రీసెట్ కోసం కార్యాలయాన్ని సంప్రదించండి.')}
+                  className="text-[11px] font-bold text-[#E5A000] hover:underline"
+                >
+                  Forgot Password?
+                </button>
+              </div>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            {/* Login as Radio Selector Box */}
+            <div className="bg-[#F8F9FA] rounded-xl p-2 sm:p-2.5 border border-gray-200/80 flex items-center justify-between mt-1">
+              <span className="text-[11px] sm:text-xs font-bold text-[#111111]">Login as</span>
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-1 cursor-pointer text-xs font-semibold text-gray-800">
+                  <input
+                    type="checkbox"
+                    checked={loginAs === 'user'}
+                    onChange={() => setLoginAs('user')}
+                    className="w-3.5 h-3.5 rounded text-[#F5BE18] focus:ring-[#F5BE18] accent-[#F5BE18] cursor-pointer"
+                  />
+                  <span>User</span>
+                </label>
+
+                <label className="flex items-center gap-1 cursor-pointer text-xs font-semibold text-gray-800">
+                  <input
+                    type="checkbox"
+                    checked={loginAs === 'admin'}
+                    onChange={() => {
+                      setLoginAs('admin');
+                      navigate('/admin/login');
+                    }}
+                    className="w-3.5 h-3.5 rounded text-[#F5BE18] focus:ring-[#F5BE18] accent-[#F5BE18] cursor-pointer"
+                  />
+                  <span>Admin</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Login Button */}
+            <button
               type="submit"
-              className="btn-primary w-full flex items-center justify-center space-x-2 py-2.5 sm:py-3 mt-2 text-xs sm:text-sm font-bold"
+              className="w-full bg-[#F5BE18] hover:bg-[#E5AF00] text-white font-extrabold text-xs sm:text-sm rounded-xl py-2.5 shadow-md hover:shadow-lg transition-all transform active:scale-95 cursor-pointer mt-2"
             >
-              <span>{t('signIn')}</span>
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-            </motion.button>
+              Login
+            </button>
           </form>
 
-          {/* Links */}
-          <div className="mt-4 text-center space-y-1.5 text-xs sm:text-sm">
-            <p className="text-white">
-              {t('dontHaveAccount')}{' '}
-              <Link to="/user/register" className="text-primary-yellow font-extrabold hover:underline ml-1">
-                {t('signUp')}
-              </Link>
-            </p>
-            <p className="text-amber-200 text-xs">
-              అడ్మిన్ లాగిన్ అవ్వాలా? (Admin?){' '}
-              <Link to="/admin/login" className="text-primary-yellow font-extrabold hover:underline ml-1">
-                అడ్మిన్ లాగిన్ (Admin Login)
-              </Link>
-            </p>
+          {/* Bottom Divider & Link */}
+          <div className="flex items-center my-2.5">
+            <div className="flex-1 h-px bg-gray-200" />
+            <span className="px-2 text-[11px] text-gray-400 font-medium">or</span>
+            <div className="flex-1 h-px bg-gray-200" />
           </div>
 
-          {/* Info Card */}
-          <div className="mt-4 pt-3 border-t border-primary-yellow/20 text-center">
-            <div className="bg-primary-yellow/90 rounded-lg p-2 border border-primary-yellow text-black text-[11px] sm:text-xs">
-              <span className="font-bold">కొత్త ఖాతాను సృష్టించి లాగిన్ చేయండి</span> (Register a new account to login)
-            </div>
+          <div className="text-center text-[11px] sm:text-xs text-gray-600 font-medium">
+            Don't have an account?{' '}
+            <Link to="/user/register" className="text-[#E5A000] font-extrabold hover:underline ml-0.5">
+              Register
+            </Link>
           </div>
         </div>
       </motion.div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -70,47 +70,23 @@ const AdminDashboard = ({ setIsAdmin }) => {
     }
   ]);
 
-  const [complaints, setComplaints] = useState([
-    {
-      id: 1,
-      userId: 'user1',
-      userName: 'రమేష్ కుమార్',
-      subject: 'రోడ్డు నిర్మాణం',
-      description: 'మన గ్రామంలో ప్రధాన రోడ్డు చాలా చెడుగా ఉంది, దయచేసి పరిష్కరించండి',
-      category: 'roads',
-      village: 'కొండేపి',
-      status: 'pending',
-      createdAt: '2024-01-25',
-      response: '',
-      respondedAt: ''
-    },
-    {
-      id: 2,
-      userId: 'user1',
-      userName: 'లక్ష్మి దేవి',
-      subject: 'తాగునీటి సమస్య',
-      description: 'మన ప్రాంతంలో తాగునీరు లేదు, దయచేసి ఏర్పాటు చేయండి',
-      category: 'water',
-      village: 'మార్కాపురం',
-      status: 'in-progress',
-      createdAt: '2024-01-24',
-      response: 'మీ ఫిర్యాదును పరిశీలిస్తున్నాము. త్వరలో పరిష్కారం అందిస్తాము.',
-      respondedAt: '2024-01-26'
-    },
-    {
-      id: 3,
-      userId: 'user2',
-      userName: 'సురేష్ కుమార్',
-      subject: 'విద్యార్థుల సమస్య',
-      description: 'పాఠశాలలో సరైన సౌకర్యాలు లేవు',
-      category: 'education',
-      village: 'ఒంగోలు',
-      status: 'pending',
-      createdAt: '2024-01-26',
-      response: '',
-      respondedAt: ''
+  const [complaints, setComplaints] = useState([]);
+
+  const fetchComplaints = async () => {
+    try {
+      const response = await fetch('/api/complaints');
+      if (response.ok) {
+        const data = await response.json();
+        setComplaints(data);
+      }
+    } catch (error) {
+      console.error('Error fetching complaints:', error);
     }
-  ]);
+  };
+
+  useEffect(() => {
+    fetchComplaints();
+  }, []);
 
   const [newSchedule, setNewSchedule] = useState({
     title: '',
@@ -145,6 +121,7 @@ const AdminDashboard = ({ setIsAdmin }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminData');
     setIsAdmin(false);
     navigate('/');
   };
@@ -202,29 +179,57 @@ const AdminDashboard = ({ setIsAdmin }) => {
     setSelectedSchedule(null);
   };
 
-  const handleUpdateComplaintStatus = (id, status) => {
-    setComplaints(complaints.map(c => 
-      c.id === id ? { ...c, status } : c
-    ));
+  const handleUpdateComplaintStatus = async (id, status) => {
+    try {
+      const response = await fetch(`/api/complaints/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (response.ok) {
+        setComplaints(complaints.map(c => 
+          (c._id === id || c.id === id) ? { ...c, status } : c
+        ));
+      }
+    } catch (error) {
+      console.error('Error updating complaint status:', error);
+    }
   };
 
   const handleRespondToComplaint = (complaintId) => {
-    const complaint = complaints.find(c => c.id === complaintId);
+    const complaint = complaints.find(c => c._id === complaintId || c.id === complaintId);
     setSelectedComplaint(complaintId);
-    setComplaintResponse(complaint.response || '');
+    setComplaintResponse(complaint?.response || '');
     setShowResponseModal(true);
   };
 
-  const handleSaveResponse = (e) => {
+  const handleSaveResponse = async (e) => {
     e.preventDefault();
-    setComplaints(complaints.map(c => 
-      c.id === selectedComplaint ? { 
-        ...c, 
-        response: complaintResponse,
-        respondedAt: new Date().toISOString(),
-        status: 'resolved'
-      } : c
-    ));
+    if (!selectedComplaint) return;
+
+    const respondedAt = new Date().toISOString().split('T')[0];
+
+    try {
+      const apiRes = await fetch(`/api/complaints/${selectedComplaint}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          response: complaintResponse,
+          respondedAt,
+          status: 'resolved'
+        }),
+      });
+
+      if (apiRes.ok) {
+        const updatedComplaint = await apiRes.json();
+        setComplaints(complaints.map(c => 
+          (c._id === selectedComplaint || c.id === selectedComplaint) ? updatedComplaint : c
+        ));
+      }
+    } catch (error) {
+      console.error('Error saving complaint response:', error);
+    }
+
     setShowResponseModal(false);
     setComplaintResponse('');
     setSelectedComplaint(null);
@@ -268,33 +273,6 @@ const AdminDashboard = ({ setIsAdmin }) => {
 
   return (
     <div className="min-h-screen bg-gradient-gold">
-      {/* Header */}
-      <div className="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-text-primary">{t('adminPanel')}</h1>
-              <p className="text-text-secondary text-sm">{t('mlaName')}</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/')}
-                className="flex items-center space-x-2 px-4 py-2 bg-primary-yellow/10 hover:bg-primary-yellow/20 rounded-xl transition-all"
-              >
-                <Home className="w-5 h-5" />
-                <span className="hidden sm:inline">{t('home')}</span>
-              </button>
-              <button
-                onClick={handleLogout}
-                className="flex items-center space-x-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-xl transition-all"
-              >
-                <LogOut className="w-5 h-5" />
-                <span className="hidden sm:inline">{t('logout')}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Stats Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -552,7 +530,7 @@ const AdminDashboard = ({ setIsAdmin }) => {
               <div className="space-y-4">
                 {schedules.map((schedule) => (
                   <motion.div
-                    key={schedule.id}
+                    key={schedule._id || schedule.id}
                     whileHover={{ scale: 1.01 }}
                     className="glass-card p-6"
                   >
@@ -652,71 +630,74 @@ const AdminDashboard = ({ setIsAdmin }) => {
               </div>
 
               <div className="space-y-4">
-                {complaints.map((complaint) => (
-                  <motion.div
-                    key={complaint.id}
-                    whileHover={{ scale: 1.01 }}
-                    className="glass-card p-6"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-lg font-bold text-text-primary">
-                          {complaint.subject}
-                        </h3>
-                        <p className="text-text-secondary text-sm">
-                          {complaint.userName} • {complaint.village}
-                        </p>
+                {complaints.map((complaint) => {
+                  const complaintId = complaint._id || complaint.id;
+                  return (
+                    <motion.div
+                      key={complaintId}
+                      whileHover={{ scale: 1.01 }}
+                      className="glass-card p-6"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h3 className="text-lg font-bold text-text-primary">
+                            {complaint.subject}
+                          </h3>
+                          <p className="text-text-secondary text-sm">
+                            {complaint.userName} • {complaint.village}
+                          </p>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(complaint.status)}`}>
+                          {t(complaint.status)}
+                        </span>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(complaint.status)}`}>
-                        {t(complaint.status)}
-                      </span>
-                    </div>
-                    <p className="text-text-secondary mb-4">{complaint.description}</p>
-                    {complaint.response && (
-                      <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
-                        <p className="text-sm font-medium text-green-800 mb-1">Your Response:</p>
-                        <p className="text-sm text-green-700">{complaint.response}</p>
-                      </div>
-                    )}
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-text-light">
-                        {new Date(complaint.createdAt).toLocaleDateString('te-IN')}
-                      </span>
-                      <div className="flex flex-wrap gap-2">
-                        {complaint.status === 'pending' && (
-                          <>
+                      <p className="text-text-secondary mb-4">{complaint.description}</p>
+                      {complaint.response && (
+                        <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                          <p className="text-sm font-medium text-green-800 mb-1">Your Response:</p>
+                          <p className="text-sm text-green-700">{complaint.response}</p>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-text-light">
+                          {new Date(complaint.createdAt).toLocaleDateString('te-IN')}
+                        </span>
+                        <div className="flex flex-wrap gap-2">
+                          {complaint.status === 'pending' && (
+                            <>
+                              <button
+                                onClick={() => handleUpdateComplaintStatus(complaintId, 'in-progress')}
+                                className="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg text-sm transition-colors"
+                              >
+                                {t('inProgress')}
+                              </button>
+                              <button
+                                onClick={() => handleUpdateComplaintStatus(complaintId, 'resolved')}
+                                className="px-3 py-1 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg text-sm transition-colors"
+                              >
+                                {t('resolved')}
+                              </button>
+                            </>
+                          )}
+                          {complaint.status === 'in-progress' && (
                             <button
-                              onClick={() => handleUpdateComplaintStatus(complaint.id, 'in-progress')}
-                              className="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg text-sm transition-colors"
-                            >
-                              {t('inProgress')}
-                            </button>
-                            <button
-                              onClick={() => handleUpdateComplaintStatus(complaint.id, 'resolved')}
+                              onClick={() => handleUpdateComplaintStatus(complaintId, 'resolved')}
                               className="px-3 py-1 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg text-sm transition-colors"
                             >
                               {t('resolved')}
                             </button>
-                          </>
-                        )}
-                        {complaint.status === 'in-progress' && (
+                          )}
                           <button
-                            onClick={() => handleUpdateComplaintStatus(complaint.id, 'resolved')}
-                            className="px-3 py-1 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg text-sm transition-colors"
+                            onClick={() => handleRespondToComplaint(complaintId)}
+                            className="px-3 py-1 bg-purple-100 hover:bg-purple-200 text-purple-600 rounded-lg text-sm transition-colors cursor-pointer"
                           >
-                            {t('resolved')}
+                            {complaint.response ? 'Update Response' : 'Respond'}
                           </button>
-                        )}
-                        <button
-                          onClick={() => handleRespondToComplaint(complaint.id)}
-                          className="px-3 py-1 bg-purple-100 hover:bg-purple-200 text-purple-600 rounded-lg text-sm transition-colors"
-                        >
-                          {complaint.response ? 'Update Response' : 'Respond'}
-                        </button>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </div>
 
               {/* Add Content Modal */}
