@@ -31,23 +31,12 @@ const Header = ({ isAdmin, isUser, setIsAdmin, setIsUser }) => {
           
           {/* Left: Logo and Name */}
           <Link to="/" className="flex items-center space-x-3 group">
-            {/* Bicycle Icon Badge */}
-            <div className="w-12 h-12 md:w-14 md:h-14 bg-amber-400 rounded-full flex items-center justify-center p-2 shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300">
-              <svg 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className="w-7 h-7 text-black"
-              >
-                <circle cx="5.5" cy="17.5" r="3.5" />
-                <circle cx="18.5" cy="17.5" r="3.5" />
-                <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                <path d="M12 17.5V14l-3-3 4-3 2 3h3" />
-              </svg>
-            </div>
+            {/* TDP Logo Badge */}
+            <img 
+              src="/bgimages/tdplogo.png" 
+              alt="TDP Logo" 
+              className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 object-contain rounded-full shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300"
+            />
 
             {/* Title & Red Constituency Subtitle */}
             <div className="min-w-0 flex-1">
