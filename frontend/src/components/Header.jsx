@@ -50,12 +50,12 @@ const Header = ({ isAdmin, isUser, setIsAdmin, setIsUser }) => {
             </div>
 
             {/* Title & Red Constituency Subtitle */}
-            <div>
-              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white leading-snug">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xs sm:text-base md:text-xl font-bold tracking-tight text-white leading-tight truncate max-w-[160px] sm:max-w-none">
                 {t('mlaName') || 'దామచర్ల జనార్దన రావు'}
               </h1>
-              <p className="text-sm font-semibold text-red-500 tracking-wide">
-                {t('constituency') || 'MLA - [నియోజకవర్గం పేరు]'}
+              <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-red-500 tracking-wide truncate max-w-[150px] sm:max-w-none">
+                {t('constituency') || 'MLA-Ongole constituency'}
               </p>
             </div>
           </Link>

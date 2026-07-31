@@ -30,14 +30,11 @@ const Footer = () => {
         
         {/* Center Logo */}
         <div className="flex justify-center mb-2 sm:mb-3">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-[#F4C019] flex items-center justify-center shadow-md">
-            {/* Bicycle Icon */}
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="5.5" cy="17.5" r="3.5" />
-              <circle cx="18.5" cy="17.5" r="3.5" />
-              <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2" />
-            </svg>
-          </div>
+          <img 
+            src="/bgimages/tdplogo.png" 
+            alt="TDP Logo" 
+            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain rounded-full shadow-md hover:scale-105 transition-transform"
+          />
         </div>
 
         {/* Main Title */}
