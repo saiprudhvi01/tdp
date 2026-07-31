@@ -36,7 +36,7 @@ function App() {
           />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/schedules" element={<Schedules />} />
+            <Route path="/schedules" element={<Schedules isAdmin={isAdmin} />} />
             <Route path="/status" element={<Status isAdmin={isAdmin} isUser={isUser} />} />
             <Route path="/user/login" element={<UserLogin setIsUser={setIsUser} setIsAdmin={setIsAdmin} />} />
             <Route path="/user/register" element={<UserRegister />} />

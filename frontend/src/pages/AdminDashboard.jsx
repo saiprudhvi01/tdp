@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import ScheduleTimelineDashboard from '../components/ScheduleTimelineDashboard';
 import { 
   Calendar, 
   MessageSquare, 
@@ -24,51 +25,8 @@ const AdminDashboard = ({ setIsAdmin }) => {
   const [activeTab, setActiveTab] = useState('schedules');
   const [showAddSchedule, setShowAddSchedule] = useState(false);
 
-  // Dummy data with all fields
-  const [schedules, setSchedules] = useState([
-    {
-      id: 1,
-      title: 'గ్రామ సదుపాయాల అభివృద్ధి కార్యక్రమం',
-      description: 'కొండేపి మండలంలో రోడ్లు, చిన్న కాలువలు మరియు వీధి దీపాల ఏర్పాటు',
-      date: '2024-01-15',
-      location: 'కొండేపి',
-      village: 'కొండేపి',
-      mandal: 'కొండేపి',
-      status: 'completed',
-      isPermanent: true,
-      content: 'ఈ కార్యక్రమం ద్వారా మన గ్రామంలో 15 కిలోమీటర్ల రోడ్డు నిర్మాణం, 8 చిన్న కాలువల పునరుద్ధరణ మరియు 50 వీధి దీపాల ఏర్పాటు జరిగింది.',
-      gallery: ['/images/p1.jpg', '/images/p2.jpg'],
-      videos: []
-    },
-    {
-      id: 2,
-      title: 'ప్రజా సమస్యల పరిష్కార శిబిరం',
-      description: 'ప్రజల సమస్యలను విని పరిష్కరించడానికి ప్రత్యేక శిబిరం నిర్వహణ',
-      date: '2024-01-20',
-      location: 'ప్రకాశం',
-      village: 'ప్రకాశం',
-      mandal: 'ప్రకాశం',
-      status: 'completed',
-      isPermanent: false,
-      content: 'ఈ శిబిరంలో 200 మంది ప్రజల నుండి వివిధ సమస్యలు స్వీకరించబడ్డాయి. వాటిలో 150 సమస్యలకు పరిష్కారం అందించబడింది.',
-      gallery: ['/images/p2.jpg', '/images/p3.jpg'],
-      videos: []
-    },
-    {
-      id: 3,
-      title: 'విద్యార్థుల సహాయ నిధి పంపిణీ',
-      description: 'ఆర్థికంగా వెనుకబడిన విద్యార్థులకు స్కాలర్‌షిప్‌లు మరియు సహాయ నిధి పంపిణీ',
-      date: '2024-02-01',
-      location: 'ఒంగోలు',
-      village: 'ఒంగోలు',
-      mandal: 'ఒంగోలు',
-      status: 'upcoming',
-      isPermanent: true,
-      content: '',
-      gallery: [],
-      videos: []
-    }
-  ]);
+  // Start with empty array — loaded from API below
+  const [schedules, setSchedules] = useState([]);
 
   const [complaints, setComplaints] = useState([]);
 
@@ -84,8 +42,21 @@ const AdminDashboard = ({ setIsAdmin }) => {
     }
   };
 
+  const fetchSchedules = async () => {
+    try {
+      const response = await fetch('/api/schedules');
+      if (response.ok) {
+        const data = await response.json();
+        setSchedules(data);
+      }
+    } catch (error) {
+      console.error('Error fetching schedules:', error);
+    }
+  };
+
   useEffect(() => {
     fetchComplaints();
+    fetchSchedules();
   }, []);
 
   const [newSchedule, setNewSchedule] = useState({
@@ -126,42 +97,78 @@ const AdminDashboard = ({ setIsAdmin }) => {
     navigate('/');
   };
 
-  const handleAddSchedule = (e) => {
+  const handleAddSchedule = async (e) => {
     e.preventDefault();
-    const schedule = {
-      id: schedules.length + 1,
-      ...newSchedule,
-      gallery: [],
-      videos: []
-    };
-    setSchedules([...schedules, schedule]);
-    setNewSchedule({
-      title: '',
-      description: '',
-      date: '',
-      location: '',
-      village: '',
-      mandal: '',
-      status: 'upcoming',
-      isPermanent: false,
-      content: ''
-    });
-    setShowAddSchedule(false);
+    try {
+      const formData = new FormData();
+      formData.append('title', newSchedule.title);
+      formData.append('description', newSchedule.description);
+      formData.append('date', newSchedule.date);
+      formData.append('location', newSchedule.location);
+      if (newSchedule.village) formData.append('village', newSchedule.village);
+      if (newSchedule.mandal) formData.append('mandal', newSchedule.mandal);
+      formData.append('status', newSchedule.status);
+      if (newSchedule.content) formData.append('content', newSchedule.content);
+      formData.append('isPermanent', String(newSchedule.isPermanent));
+
+      const response = await fetch('/api/schedules', {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        setNewSchedule({ title: '', description: '', date: '', location: '', village: '', mandal: '', status: 'upcoming', isPermanent: false, content: '' });
+        setShowAddSchedule(false);
+        fetchSchedules();
+      }
+    } catch (error) {
+      console.error('Error adding schedule:', error);
+    }
   };
 
-  const handleDeleteSchedule = (id) => {
-    setSchedules(schedules.filter(s => s.id !== id));
+  const handleDeleteSchedule = async (id) => {
+    try {
+      await fetch(`/api/schedules/${id}`, { method: 'DELETE' });
+      fetchSchedules();
+    } catch (error) {
+      console.error('Error deleting schedule:', error);
+    }
   };
 
-  const handleUpdateStatus = (id, newStatus) => {
-    setSchedules(schedules.map(s => 
-      s.id === id ? { ...s, status: newStatus } : s
-    ));
+  const handleUpdateStatus = async (id, newStatus) => {
+    try {
+      await fetch(`/api/schedules/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      fetchSchedules();
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
   };
 
   const handleAddContent = (scheduleId) => {
     setSelectedSchedule(scheduleId);
     setShowAddContent(true);
+  };
+
+  const handleAddMediaToSchedule = async (id, content, mediaFiles) => {
+    try {
+      const formData = new FormData();
+      if (content) formData.append('content', content);
+      mediaFiles.forEach((media) => {
+        if (media.file) {
+          formData.append(media.type === 'video' ? 'videos' : 'gallery', media.file);
+        }
+      });
+      await fetch(`/api/schedules/${id}/content`, {
+        method: 'PATCH',
+        body: formData
+      });
+      fetchSchedules();
+    } catch (error) {
+      console.error('Error adding media:', error);
+    }
   };
 
   const handleSaveContent = (e) => {
@@ -346,19 +353,6 @@ const AdminDashboard = ({ setIsAdmin }) => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
             >
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-text-primary">{t('schedules')}</h2>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowAddSchedule(true)}
-                  className="btn-primary flex items-center space-x-2"
-                >
-                  <Plus className="w-5 h-5" />
-                  <span>{t('addSchedule')}</span>
-                </motion.button>
-              </div>
-
               {/* Add Schedule Form */}
               <AnimatePresence>
                 {showAddSchedule && (
@@ -526,86 +520,16 @@ const AdminDashboard = ({ setIsAdmin }) => {
                 )}
               </AnimatePresence>
 
-              {/* Schedules List */}
-              <div className="space-y-4">
-                {schedules.map((schedule) => (
-                  <motion.div
-                    key={schedule._id || schedule.id}
-                    whileHover={{ scale: 1.01 }}
-                    className="glass-card p-6"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="text-lg font-bold text-text-primary mb-2">
-                          {schedule.title}
-                        </h3>
-                        <p className="text-text-secondary mb-3">{schedule.description}</p>
-                        <div className="flex flex-wrap gap-2 text-sm text-text-light">
-                          <span className="flex items-center space-x-1">
-                            <Calendar className="w-4 h-4" />
-                            <span>{new Date(schedule.date).toLocaleDateString('te-IN')}</span>
-                          </span>
-                          <span className="flex items-center space-x-1">
-                            <span>📍</span>
-                            <span>{schedule.location}</span>
-                          </span>
-                          {schedule.village && (
-                            <span className="flex items-center space-x-1">
-                              <span>🏘️</span>
-                              <span>{schedule.village}</span>
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center space-x-2 mt-2">
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(schedule.status)}`}>
-                            {t(schedule.status)}
-                          </span>
-                          {schedule.isPermanent && (
-                            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                              {t('permanent')}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex flex-col space-y-2">
-                        <div className="flex space-x-2">
-                          <button className="p-2 hover:bg-blue-100 rounded-lg transition-colors">
-                            <Edit className="w-5 h-5 text-blue-500" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteSchedule(schedule.id)}
-                            className="p-2 hover:bg-red-100 rounded-lg transition-colors"
-                          >
-                            <Trash2 className="w-5 h-5 text-red-500" />
-                          </button>
-                        </div>
-                        {schedule.status === 'upcoming' && (
-                          <button
-                            onClick={() => handleUpdateStatus(schedule.id, 'ongoing')}
-                            className="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg text-xs transition-colors"
-                          >
-                            Mark as Ongoing
-                          </button>
-                        )}
-                        {schedule.status === 'ongoing' && (
-                          <button
-                            onClick={() => handleUpdateStatus(schedule.id, 'completed')}
-                            className="px-3 py-1 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg text-xs transition-colors"
-                          >
-                            Mark as Completed
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleAddContent(schedule.id)}
-                          className="px-3 py-1 bg-purple-100 hover:bg-purple-200 text-purple-600 rounded-lg text-xs transition-colors"
-                        >
-                          Add Content
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+              {/* Professional Timeline Schedule Dashboard (Admin View with Add Schedule & CRUD Actions) */}
+              <ScheduleTimelineDashboard
+                schedules={schedules}
+                isAdmin={true}
+                onAddSchedule={() => setShowAddSchedule(true)}
+                onDeleteSchedule={handleDeleteSchedule}
+                onUpdateStatus={handleUpdateStatus}
+                onAddContent={handleAddContent}
+                onAddMediaToSchedule={handleAddMediaToSchedule}
+              />
             </motion.div>
           )}
 
