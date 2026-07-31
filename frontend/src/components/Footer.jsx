@@ -5,8 +5,8 @@ const Footer = () => {
     <footer className="w-full bg-gradient-to-b from-[#FCFAF6] to-[#F9F6EE] relative overflow-hidden">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center opacity-[15%]"
-        style={{ backgroundImage: "url('/bgimages/footerbg.png')" }}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[70%]"
+        style={{ backgroundImage: "url('/bgimages/footerbgfin.png')" }}
       />
       
       {/* Background Artwork - Left Side */}

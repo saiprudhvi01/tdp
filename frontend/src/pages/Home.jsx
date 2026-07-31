@@ -184,7 +184,7 @@ const Home = () => {
       </div>
 
       {/* Main Content Overlay */}
-      <div className="relative z-10 flex flex-col min-h-screen justify-between pb-6 md:pb-12">
+      <div className="relative z-10 flex flex-col min-h-screen justify-between pb-0 mb-0">
 
         {/* Leaders Showcase - Static Grid */}
         <section ref={topSectionRef} style={{ scrollMarginTop: '90px' }} className="py-2 md:py-4 relative w-full flex items-center justify-center px-2 sm:px-4">
@@ -357,8 +357,8 @@ const Home = () => {
           </div>
         </section>
 
-        {/* News Carousel Section - Full Width */}
-        <section ref={newsSectionRef} className="w-full py-6 sm:py-8 md:py-12 mt-2 md:mt-6 bg-gradient-to-b from-[#FFF8E7] to-[#FFF9EB]">
+        {/* News Carousel Section - Full Width Seamless Connection */}
+        <section ref={newsSectionRef} className="w-full py-6 sm:py-8 md:py-10 mt-0 mb-0 bg-gradient-to-b from-[#FFF8E7] to-[#FFF9EB]">
           {/* Section Heading */}
           <div className="text-center mb-4 md:mb-6 px-4">
             <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-2 md:mb-3">

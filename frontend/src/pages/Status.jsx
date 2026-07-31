@@ -239,9 +239,9 @@ const Status = ({ isAdmin, isUser }) => {
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-gray-900 pb-12">
-      
+
       {/* Header Banner - Compact Height Viewport Optimization */}
-      <div 
+      <div
         className="relative w-full overflow-hidden shadow-sm border-b border-amber-200/50 bg-no-repeat bg-top bg-cover sm:bg-[length:100%_100%] min-h-[85px] sm:min-h-[110px] md:min-h-[130px] flex items-center mb-3 sm:mb-4"
         style={{ backgroundImage: "url('/bgimages/status_bg_final.png')" }}
       >
@@ -598,8 +598,8 @@ const Status = ({ isAdmin, isUser }) => {
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, type: 'image' }))}
                       className={`flex flex-col items-center gap-1 p-3 rounded-2xl border text-xs font-bold transition-all ${formData.type === 'image'
-                          ? 'border-[#F4B400] bg-amber-50 text-amber-900'
-                          : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                        ? 'border-[#F4B400] bg-amber-50 text-amber-900'
+                        : 'border-gray-200 text-gray-600 hover:bg-gray-50'
                         }`}
                     >
                       <ImageIcon className="w-5 h-5" />
@@ -610,8 +610,8 @@ const Status = ({ isAdmin, isUser }) => {
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, type: 'video' }))}
                       className={`flex flex-col items-center gap-1 p-3 rounded-2xl border text-xs font-bold transition-all ${formData.type === 'video'
-                          ? 'border-[#F4B400] bg-amber-50 text-amber-900'
-                          : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                        ? 'border-[#F4B400] bg-amber-50 text-amber-900'
+                        : 'border-gray-200 text-gray-600 hover:bg-gray-50'
                         }`}
                     >
                       <VideoIcon className="w-5 h-5" />
@@ -622,8 +622,8 @@ const Status = ({ isAdmin, isUser }) => {
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, type: 'text' }))}
                       className={`flex flex-col items-center gap-1 p-3 rounded-2xl border text-xs font-bold transition-all ${formData.type === 'text'
-                          ? 'border-[#F4B400] bg-amber-50 text-amber-900'
-                          : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                        ? 'border-[#F4B400] bg-amber-50 text-amber-900'
+                        : 'border-gray-200 text-gray-600 hover:bg-gray-50'
                         }`}
                     >
                       <FileText className="w-5 h-5" />

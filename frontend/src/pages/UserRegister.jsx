@@ -11,9 +11,7 @@ const UserRegister = () => {
     name: '',
     email: '',
     phone: '',
-    password: '',
-    village: '',
-    mandal: ''
+    password: ''
   });
 
   const handleSubmit = async (e) => {
@@ -51,7 +49,7 @@ const UserRegister = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
+    <div className="min-h-[calc(100vh-70px)] h-auto flex items-center justify-center px-3 py-2 sm:py-4 relative overflow-hidden">
       {/* Background image with opacity 50% */}
       <div className="absolute inset-0 z-0 -z-10">
         <div
@@ -74,137 +72,105 @@ const UserRegister = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative z-10 w-full max-w-md my-auto"
+        transition={{ duration: 0.4 }}
+        className="relative z-10 w-full max-w-sm sm:max-w-md md:max-w-lg my-auto"
       >
-        <div className="glass-card p-8 md:p-10">
+        <div className="glass-card p-4 sm:p-5 md:p-6">
           {/* Header */}
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border-2 border-primary-yellow">
-              <User className="w-8 h-8 text-black" />
+          <div className="text-center mb-2.5 sm:mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-1 shadow-lg border-2 border-primary-yellow">
+              <User className="w-5 h-5 sm:w-6 sm:h-6 text-black" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+            <h1 className="text-lg sm:text-2xl font-extrabold text-white mb-0.5 leading-tight">
               {t('register')}
             </h1>
-            <p className="text-white">{t('pleaseLogin')}</p>
+            <p className="text-[11px] sm:text-xs text-gray-200">{t('pleaseLogin')}</p>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-white mb-1.5">
-                {t('name')}
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="glass-input w-full text-black placeholder-gray-700"
-                placeholder="Full Name"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-1.5">
-                {t('email')}
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="glass-input w-full text-black placeholder-gray-700"
-                placeholder="your@email.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-1.5">
-                {t('phone')}
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className="glass-input w-full text-black placeholder-gray-700"
-                placeholder="+91 98765 43210"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
+          {/* Form - Compact 2-column grid layout for 4 fields */}
+          <form onSubmit={handleSubmit} className="space-y-2 sm:space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               <div>
-                <label className="block text-sm font-medium text-white mb-1.5">
-                  {t('village')}
+                <label className="block text-[11px] sm:text-xs font-semibold text-white mb-0.5">
+                  {t('name')}
                 </label>
                 <input
                   type="text"
-                  name="village"
-                  value={formData.village}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
-                  className="glass-input w-full text-black placeholder-gray-700"
-                  placeholder="Village"
+                  required
+                  className="glass-input w-full text-black placeholder-gray-700 py-1.5 px-2.5 text-xs"
+                  placeholder="Full Name"
                 />
               </div>
+
               <div>
-                <label className="block text-sm font-medium text-white mb-1.5">
-                  {t('mandal')}
+                <label className="block text-[11px] sm:text-xs font-semibold text-white mb-0.5">
+                  {t('email')}
                 </label>
                 <input
-                  type="text"
-                  name="mandal"
-                  value={formData.mandal}
+                  type="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleChange}
-                  className="glass-input w-full text-black placeholder-gray-700"
-                  placeholder="Mandal"
+                  required
+                  className="glass-input w-full text-black placeholder-gray-700 py-1.5 px-2.5 text-xs"
+                  placeholder="your@email.com"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-white mb-1.5">
-                {t('password')}
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                className="glass-input w-full text-black placeholder-gray-700"
-                placeholder="••••••••"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+              <div>
+                <label className="block text-[11px] sm:text-xs font-semibold text-white mb-0.5">
+                  {t('phone')}
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  className="glass-input w-full text-black placeholder-gray-700 py-1.5 px-2.5 text-xs"
+                  placeholder="+91 98765 43210"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] sm:text-xs font-semibold text-white mb-0.5">
+                  {t('password')}
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className="glass-input w-full text-black placeholder-gray-700 py-1.5 px-2.5 text-xs"
+                  placeholder="••••••••"
+                />
+              </div>
             </div>
 
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="btn-primary w-full flex items-center justify-center space-x-2 mt-6"
+              className="btn-primary w-full flex items-center justify-center space-x-2 py-2 sm:py-2.5 mt-2.5 text-xs sm:text-sm font-bold"
             >
               <span>{t('signUp')}</span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
           </form>
 
           {/* Login Link */}
-          <div className="mt-6 text-center">
-            <p className="text-white">
+          <div className="mt-2.5 sm:mt-3 text-center">
+            <p className="text-xs text-white">
               {t('alreadyHaveAccount')}{' '}
-              <Link to="/user/login" className="text-primary-yellow font-bold hover:underline ml-1">
+              <Link to="/user/login" className="text-primary-yellow font-extrabold hover:underline ml-1">
                 {t('signIn')}
               </Link>
-            </p>
-          </div>
-
-          {/* Quotes */}
-          <div className="mt-6 pt-4 border-t border-primary-yellow/20 text-center">
-            <p className="text-sm text-white italic">
-              {t('quote1')}
             </p>
           </div>
         </div>

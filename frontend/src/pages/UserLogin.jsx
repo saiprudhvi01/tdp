@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ArrowRight, User } from 'lucide-react';
+import { ArrowRight, User } from 'lucide-react';
 
 const UserLogin = ({ setIsUser }) => {
   const { t } = useLanguage();
@@ -14,10 +14,10 @@ const UserLogin = ({ setIsUser }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     const email = formData.email.trim();
     const password = formData.password.trim();
-
+    
     try {
       const response = await fetch('/api/auth/user/login', {
         method: 'POST',
@@ -51,8 +51,8 @@ const UserLogin = ({ setIsUser }) => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
-      {/* Background image with overlay */}
+    <div className="min-h-[calc(100vh-70px)] h-auto flex items-center justify-center px-4 py-3 sm:py-6 relative overflow-hidden">
+      {/* Background image with opacity 50% */}
       <div className="absolute inset-0 z-0 -z-10">
         <div
           className="absolute inset-0 bg-cover bg-center blur-sm opacity-50"
@@ -74,25 +74,25 @@ const UserLogin = ({ setIsUser }) => {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative z-10 w-full max-w-md"
+        transition={{ duration: 0.4 }}
+        className="relative z-10 w-full max-w-sm sm:max-w-md my-auto"
       >
-        <div className="glass-card p-8 md:p-10">
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border-2 border-primary-yellow">
-              <User className="w-8 h-8 text-black" />
+        <div className="glass-card p-5 sm:p-7 md:p-8">
+          {/* Logo & Title */}
+          <div className="text-center mb-4 sm:mb-6">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-lg border-2 border-primary-yellow">
+              <User className="w-6 h-6 sm:w-7 sm:h-7 text-black" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-1 leading-tight">
               {t('welcomeBack')}
             </h1>
-            <p className="text-white">{t('pleaseLogin')}</p>
+            <p className="text-xs sm:text-sm text-gray-200">{t('pleaseLogin')}</p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
             <div>
-              <label className="block text-sm font-medium text-white mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-white mb-1">
                 {t('email')}
               </label>
               <input
@@ -101,13 +101,13 @@ const UserLogin = ({ setIsUser }) => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="glass-input w-full text-black placeholder-gray-700"
+                className="glass-input w-full text-black placeholder-gray-700 py-2 px-3 text-xs sm:text-sm"
                 placeholder="your@email.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-white mb-1">
                 {t('password')}
               </label>
               <input
@@ -116,7 +116,7 @@ const UserLogin = ({ setIsUser }) => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="glass-input w-full text-black placeholder-gray-700"
+                className="glass-input w-full text-black placeholder-gray-700 py-2 px-3 text-xs sm:text-sm"
                 placeholder="••••••••"
               />
             </div>
@@ -125,33 +125,33 @@ const UserLogin = ({ setIsUser }) => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="btn-primary w-full flex items-center justify-center space-x-2"
+              className="btn-primary w-full flex items-center justify-center space-x-2 py-2.5 sm:py-3 mt-2 text-xs sm:text-sm font-bold"
             >
               <span>{t('signIn')}</span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
           </form>
 
-          {/* Register Link */}
-          <div className="mt-6 text-center">
+          {/* Links */}
+          <div className="mt-4 text-center space-y-1.5 text-xs sm:text-sm">
             <p className="text-white">
               {t('dontHaveAccount')}{' '}
-              <Link to="/user/register" className="text-primary-yellow font-semibold hover:underline">
+              <Link to="/user/register" className="text-primary-yellow font-extrabold hover:underline ml-1">
                 {t('signUp')}
+              </Link>
+            </p>
+            <p className="text-amber-200 text-xs">
+              అడ్మిన్ లాగిన్ అవ్వాలా? (Admin?){' '}
+              <Link to="/admin/login" className="text-primary-yellow font-extrabold hover:underline ml-1">
+                అడ్మిన్ లాగిన్ (Admin Login)
               </Link>
             </p>
           </div>
 
-          {/* Quotes */}
-          <div className="mt-8 pt-6 border-t border-primary-yellow/20 text-center">
-            <p className="text-sm text-white italic mb-2">
-              {t('quote1')}
-            </p>
-            <div className="bg-primary-yellow rounded-lg p-3 mt-2 border-2 border-primary-yellow">
-              <p className="text-xs text-black">
-                <span className="font-medium">Register a new account to login</span><br />
-                Or use demo credentials after registration
-              </p>
+          {/* Info Card */}
+          <div className="mt-4 pt-3 border-t border-primary-yellow/20 text-center">
+            <div className="bg-primary-yellow/90 rounded-lg p-2 border border-primary-yellow text-black text-[11px] sm:text-xs">
+              <span className="font-bold">కొత్త ఖాతాను సృష్టించి లాగిన్ చేయండి</span> (Register a new account to login)
             </div>
           </div>
         </div>
