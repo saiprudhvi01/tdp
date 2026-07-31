@@ -9,7 +9,6 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
 import Schedules from './pages/Schedules';
 import Status from './pages/Status';
-import FloatingChat from './components/FloatingChat';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -47,7 +46,6 @@ function App() {
               element={isUser ? <UserDashboard setIsUser={setIsUser} /> : <Navigate to="/user/login" />} 
             />
           </Routes>
-          <FloatingChat />
         </div>
       </Router>
     </LanguageProvider>
