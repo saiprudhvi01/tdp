@@ -317,12 +317,22 @@ const Home = () => {
             </div>
 
             {/* Swipe Scroll Indicator */}
-            <div className="flex flex-col items-center justify-center mt-2 sm:mt-2 gap-0.5 sm:gap-1">
-              <button className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-[#F4B400] to-[#FFD54F] text-black flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
-                <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+            <div 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="flex flex-col items-center justify-center mt-3 sm:mt-4 gap-1 cursor-pointer group"
+            >
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-r from-[#F4B400] to-[#FFD54F] text-black flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform cursor-pointer"
+                title="స్మూత్‌గా పైనకి స్క్రోల్ చేయండి"
+              >
+                <ChevronUp className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
-              <span className="text-[9px] sm:text-[10px] md:text-xs font-medium text-gray-200 tracking-wider">స్వైప్ చేసి చూడండి</span>
-              <span className="text-[8px] sm:text-[9px] md:text-[10px] text-gray-300">లేటెస్ట్ న్యూస్ / కార్యక్రమాల సమాచారం</span>
+              <span className="text-[10px] sm:text-xs md:text-xs font-semibold text-gray-200 tracking-wider group-hover:text-amber-400 transition-colors">పైకి స్క్రోల్ చేయండి (Swipe Up)</span>
+              <span className="text-[9px] sm:text-[10px] md:text-xs text-gray-300">లేటెస్ట్ న్యూస్ / కార్యక్రమాల సమాచారం</span>
             </div>
           </div>
         </section>
@@ -339,7 +349,7 @@ const Home = () => {
               <div className="w-2 h-2 md:w-3 md:h-3 rotate-45 bg-[#D4A017]" />
               
               {/* Main heading */}
-              <h2 className="text-[18px] sm:text-[24px] md:text-[42px] lg:text-[48px] font-bold text-[#4A2A1F] leading-[1.1] tracking-normal font-serif">
+              <h2 className="text-[18px] sm:text-[22px] md:text-[30px] lg:text-[34px] font-bold text-[#4A2A1F] leading-[1.2] tracking-normal font-serif">
                 మా కార్యక్రమాలు
               </h2>
               
@@ -351,23 +361,21 @@ const Home = () => {
             </div>
             
             {/* Subtitle */}
-            <p className="text-[13px] sm:text-[15px] md:text-[18px] lg:text-[20px] font-medium text-[#555555] leading-[1.5]">
+            <p className="text-[12px] sm:text-[14px] md:text-[16px] font-medium text-[#555555] leading-[1.5]">
               లేటెస్ట్ న్యూస్ / కార్యక్రమాల సమాచారం
             </p>
           </div>
           
-          <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-16">
+          <div className="relative z-10 w-full px-4 sm:px-12 md:px-16 max-w-7xl mx-auto">
             <Swiper
               modules={[Navigation, Pagination, Autoplay]}
-              spaceBetween={16}
-              slidesPerView={1.2}
+              spaceBetween={20}
+              slidesPerView={1.1}
               centeredSlides={false}
               breakpoints={{
-                480: { slidesPerView: 1.5, spaceBetween: 16 },
-                640: { slidesPerView: 2, spaceBetween: 20 },
-                768: { slidesPerView: 3, spaceBetween: 24 },
-                1024: { slidesPerView: 4, spaceBetween: 28 },
-                1280: { slidesPerView: 5, spaceBetween: 28 }
+                480: { slidesPerView: 1.4, spaceBetween: 20 },
+                640: { slidesPerView: 2, spaceBetween: 24 },
+                1024: { slidesPerView: 3, spaceBetween: 28 }
               }}
               navigation={{
                 nextEl: '.swiper-button-next',
@@ -386,55 +394,50 @@ const Home = () => {
             >
               {newsItems.map((news) => (
                 <SwiperSlide key={news.id}>
-                  <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden h-[260px] sm:h-[280px] flex flex-col">
-                    {/* Category Badge */}
-                    <div className="px-3 sm:px-4 pt-2.5 sm:pt-3 pb-1.5 sm:pb-2">
-                      <span className="inline-block px-2.5 sm:px-3 py-0.5 sm:py-1 bg-[#F4B400] text-black text-[10px] sm:text-xs font-semibold rounded-full">
-                        {news.category}
-                      </span>
+                  <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden h-[340px] sm:h-[360px] flex flex-col border border-amber-100 hover:shadow-2xl transition-shadow">
+                    {/* 1. Image Section (Fixed Height & Never Shrinks) */}
+                    <div className="flex-shrink-0">
+                      <div className="px-4 pt-3 pb-2 flex items-center justify-between bg-white">
+                        <span className="inline-block px-3 py-1 bg-[#F4B400] text-black text-xs font-bold rounded-full shadow-sm">
+                          {news.category}
+                        </span>
+                        <div className="text-xs font-medium text-gray-500">{news.date}</div>
+                      </div>
+                      <div className="relative w-full h-[130px] sm:h-[150px] overflow-hidden">
+                        <img
+                          src={news.image}
+                          alt={news.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
                     </div>
                     
-                    {/* Image */}
-                    <div className="relative w-full h-[110px] sm:h-[130px]">
-                      <img
-                        src={news.image}
-                        alt={news.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    
-                    {/* Content */}
-                    <div className="px-3 sm:px-4 py-2.5 sm:py-3 flex-1 flex flex-col">
-                      {/* Date */}
-                      <div className="text-[10px] sm:text-xs text-gray-500 mb-1">{news.date}</div>
-                      
-                      {/* Title */}
-                      <h3 className="text-[12px] sm:text-sm font-bold text-gray-900 mb-1 line-clamp-2">
+                    {/* 2. Content/Text Section (Flexible & Truncated with Ellipsis) */}
+                    <div className="p-4 flex-1 min-h-0 flex flex-col overflow-hidden">
+                      <h3 className="text-sm sm:text-base font-bold text-gray-900 mb-1.5 leading-snug line-clamp-1 flex-shrink-0">
                         {news.title}
                       </h3>
-                      
-                      {/* Description */}
-                      <p className="text-[10px] sm:text-xs text-gray-600 mb-1.5 sm:mb-2 line-clamp-2 sm:line-clamp-3">
+                      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-3 overflow-hidden text-ellipsis">
                         {news.description}
                       </p>
-                      
-                      {/* Location */}
-                      <div className="text-[10px] sm:text-xs text-gray-500 flex items-center gap-1 mt-auto">
-                        <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#F4B400] rounded-full flex-shrink-0" />
-                        {news.location}
-                      </div>
+                    </div>
+
+                    {/* 3. Location Section (Fixed & Never Compressed) */}
+                    <div className="flex-shrink-0 px-4 py-3 border-t border-gray-100 bg-gray-50/50 flex items-center gap-1.5">
+                      <span className="w-2 h-2 bg-[#F4B400] rounded-full flex-shrink-0" />
+                      <span className="text-xs font-semibold text-gray-600 truncate">{news.location}</span>
                     </div>
                   </div>
                 </SwiperSlide>
               ))}
             </Swiper>
 
-            {/* Custom Navigation Buttons - hidden on very small screens */}
-            <button className="swiper-button-prev hidden sm:flex absolute left-0 sm:left-[-10px] md:left-[-20px] top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white rounded-full shadow-xl items-center justify-center hover:bg-gray-50 transition-colors">
-              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-gray-700" />
+            {/* Custom Navigation Buttons - repositioned cleanly inside padded boundaries */}
+            <button className="swiper-button-prev hidden sm:flex absolute left-1 sm:left-2 md:left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-xl items-center justify-center hover:bg-white hover:scale-105 transition-all text-gray-800 border border-amber-200">
+              <ChevronLeft className="w-6 h-6 text-gray-800" />
             </button>
-            <button className="swiper-button-next hidden sm:flex absolute right-0 sm:right-[-10px] md:right-[-20px] top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white rounded-full shadow-xl items-center justify-center hover:bg-gray-50 transition-colors">
-              <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-gray-700" />
+            <button className="swiper-button-next hidden sm:flex absolute right-1 sm:right-2 md:right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-xl items-center justify-center hover:bg-white hover:scale-105 transition-all text-gray-800 border border-amber-200">
+              <ChevronRight className="w-6 h-6 text-gray-800" />
             </button>
 
             {/* Pagination Container */}

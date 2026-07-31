@@ -7,7 +7,8 @@ const DB_FILES = {
   users: path.join(DATA_DIR, 'users.json'),
   admins: path.join(DATA_DIR, 'admins.json'),
   schedules: path.join(DATA_DIR, 'schedules.json'),
-  complaints: path.join(DATA_DIR, 'complaints.json')
+  complaints: path.join(DATA_DIR, 'complaints.json'),
+  statuses: path.join(DATA_DIR, 'statuses.json')
 };
 
 // Initialize database files if they don't exist

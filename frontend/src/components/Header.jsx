@@ -1,11 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { Calendar, ListOrdered, User, LogOut, LayoutDashboard, Home } from 'lucide-react';
+import { Calendar, ListOrdered, User, LogOut, LayoutDashboard, Home, Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Header = ({ isAdmin, isUser, setIsAdmin, setIsUser }) => {
   const { t, toggleLanguage, language } = useLanguage();
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     if (isAdmin) {
@@ -164,9 +166,74 @@ const Header = ({ isAdmin, isUser, setIsAdmin, setIsUser }) => {
             >
               {language === 'en' ? 'తెలుగు' : 'EN'}
             </button>
+            {/* Hamburger Button */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-white hover:text-amber-400 p-1 transition-colors"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="md:hidden bg-black/95 border-b border-amber-500/20 px-4 py-4 space-y-2 shadow-xl absolute top-full left-0 w-full"
+        >
+          <Link
+            to="/"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center space-x-3 text-white hover:text-amber-400 font-semibold p-3 rounded-lg hover:bg-white/5 transition-colors"
+          >
+            <Home className="w-5 h-5 text-amber-400" />
+            <span>{t('home') || 'హోమ్'}</span>
+          </Link>
+          <Link
+            to="/status"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center space-x-3 text-white hover:text-amber-400 font-semibold p-3 rounded-lg hover:bg-white/5 transition-colors"
+          >
+            <ListOrdered className="w-5 h-5 text-amber-400" />
+            <span>{t('status') || 'స్టేటస్'}</span>
+          </Link>
+          <Link
+            to="/schedules"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center space-x-3 text-white hover:text-amber-400 font-semibold p-3 rounded-lg hover:bg-white/5 transition-colors"
+          >
+            <Calendar className="w-5 h-5 text-amber-400" />
+            <span>{t('schedules') || 'షెడ్యూల్'}</span>
+          </Link>
+
+          {(isAdmin || isUser) && (
+            <>
+              <div className="h-px bg-white/10 my-2" />
+              <Link
+                to={isAdmin ? '/admin/dashboard' : '/user/dashboard'}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center space-x-3 text-amber-400 font-semibold p-3 rounded-lg hover:bg-amber-400/10 transition-colors"
+              >
+                <LayoutDashboard className="w-5 h-5" />
+                <span>{t('dashboard')}</span>
+              </Link>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center space-x-3 text-red-400 hover:text-red-300 font-semibold p-3 rounded-lg hover:bg-red-500/10 w-full text-left transition-colors"
+              >
+                <LogOut className="w-5 h-5" />
+                <span>{t('logout')}</span>
+              </button>
+            </>
+          )}
+        </motion.div>
+      )}
     </motion.header>
   );
 };
