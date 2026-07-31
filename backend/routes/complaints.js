@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const Complaint = require('../models/Complaint');
+const db = require('../data/database');
 
 // Create new complaint
 router.post('/', async (req, res) => {
   try {
     const { subject, description, category, village, userName, userId } = req.body;
 
-    const complaint = await Complaint.create({
+    const complaint = await db.create('complaints', {
       userId: userId || 'user1',
       userName: userName || 'User',
       subject,
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 // Get all complaints
 router.get('/', async (req, res) => {
   try {
-    const complaints = await Complaint.find().lean();
+    const complaints = await db.find('complaints');
     complaints.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     res.json(complaints);
   } catch (error) {
@@ -43,7 +43,7 @@ router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
-    const updated = await Complaint.findByIdAndUpdate(id, updates, { new: true }).lean();
+    const updated = await db.updateById('complaints', id, updates);
     if (!updated) {
       return res.status(404).json({ message: 'Complaint not found' });
     }
@@ -58,8 +58,8 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await Complaint.findByIdAndDelete(id);
-    if (!deleted) {
+    const success = await db.deleteById('complaints', id);
+    if (!success) {
       return res.status(404).json({ message: 'Complaint not found' });
     }
     res.json({ message: 'Deleted successfully' });

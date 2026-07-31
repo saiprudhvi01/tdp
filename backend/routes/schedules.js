@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Schedule = require('../models/Schedule');
+const db = require('../data/database');
 const auth = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
@@ -41,7 +41,7 @@ const upload = multer({
 // Get all schedules (public)
 router.get('/', async (req, res) => {
   try {
-    const schedules = await Schedule.find().lean();
+    const schedules = await db.find('schedules');
     schedules.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
     res.json(schedules);
   } catch (error) {
@@ -63,7 +63,7 @@ router.post('/', upload.fields([
     const scheduleData = {
       title,
       description,
-      date: date ? new Date(date) : undefined,
+      date: date ? new Date(date).toISOString() : undefined,
       time,
       location,
       village,
@@ -87,7 +87,7 @@ router.post('/', upload.fields([
       scheduleData.videos = files.videos.map(file => file.filename);
     }
 
-    const schedule = await Schedule.create(scheduleData);
+    const schedule = await db.create('schedules', scheduleData);
 
     res.json(schedule);
   } catch (error) {
@@ -99,7 +99,7 @@ router.post('/', upload.fields([
 // Get schedule by ID
 router.get('/:id', async (req, res) => {
   try {
-    const schedule = await Schedule.findById(req.params.id).lean();
+    const schedule = await db.findById('schedules', req.params.id);
     if (!schedule) {
       return res.status(404).json({ message: 'Schedule not found' });
     }
@@ -123,7 +123,7 @@ router.put('/:id', upload.fields([
     const updates = {};
     if (title) updates.title = title;
     if (description) updates.description = description;
-    if (date) updates.date = new Date(date);
+    if (date) updates.date = new Date(date).toISOString();
     if (time) updates.time = time;
     if (location) updates.location = location;
     if (village) updates.village = village;
@@ -138,7 +138,7 @@ router.put('/:id', upload.fields([
     if (files.gallery) updates.gallery = files.gallery.map(file => file.filename);
     if (files.videos) updates.videos = files.videos.map(file => file.filename);
 
-    const schedule = await Schedule.findByIdAndUpdate(req.params.id, updates, { new: true }).lean();
+    const schedule = await db.updateById('schedules', req.params.id, updates);
     if (!schedule) {
       return res.status(404).json({ message: 'Schedule not found' });
     }
@@ -151,7 +151,7 @@ router.put('/:id', upload.fields([
 // Delete schedule (admin only)
 router.delete('/:id', async (req, res) => {
   try {
-    const deleted = await Schedule.findByIdAndDelete(req.params.id);
+    const deleted = await db.deleteById('schedules', req.params.id);
     if (deleted) {
       res.json({ message: 'Schedule deleted' });
     } else {
@@ -166,7 +166,7 @@ router.delete('/:id', async (req, res) => {
 router.patch('/:id/status', async (req, res) => {
   try {
     const { status } = req.body;
-    const schedule = await Schedule.findByIdAndUpdate(req.params.id, { status }, { new: true }).lean();
+    const schedule = await db.updateById('schedules', req.params.id, { status });
     if (!schedule) {
       return res.status(404).json({ message: 'Schedule not found' });
     }
@@ -182,7 +182,7 @@ router.patch('/:id/content', upload.fields([
   { name: 'videos', maxCount: 5 }
 ]), async (req, res) => {
   try {
-    const existingSchedule = await Schedule.findById(req.params.id).lean();
+    const existingSchedule = await db.findById('schedules', req.params.id);
     if (!existingSchedule) {
       return res.status(404).json({ message: 'Schedule not found' });
     }
@@ -201,7 +201,7 @@ router.patch('/:id/content', upload.fields([
       updates.videos = [...(existingSchedule.videos || []), ...newVideos];
     }
 
-    const schedule = await Schedule.findByIdAndUpdate(req.params.id, updates, { new: true }).lean();
+    const schedule = await db.updateById('schedules', req.params.id, updates);
     res.json(schedule);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

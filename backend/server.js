@@ -2,54 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const localDb = require('./data/database');
-const connectDB = require('./config/db');
-const Schedule = require('./models/Schedule');
-const Complaint = require('./models/Complaint');
 require('dotenv').config();
 
 const app = express();
 
-// Connect to MongoDB and run auto-migration
-connectDB().then(async (isConnected) => {
-  if (!isConnected) {
-    console.log('Falling back to local database...');
-    localDb.initDB().then(() => console.log('Local database initialized'));
-    return;
-  }
-  
-  try {
-    const schedulesCount = await Schedule.countDocuments();
-    if (schedulesCount === 0) {
-      console.log('Migrating schedules from JSON to MongoDB...');
-      const jsonSchedules = await localDb.readFile('schedules');
-      if (jsonSchedules && jsonSchedules.length > 0) {
-        const docs = jsonSchedules.map(s => {
-          const { _id, ...rest } = s;
-          if (rest.date) rest.date = new Date(rest.date);
-          return rest;
-        });
-        await Schedule.insertMany(docs);
-        console.log(`✅ Migrated ${docs.length} schedules to MongoDB.`);
-      }
-    }
-
-    const complaintsCount = await Complaint.countDocuments();
-    if (complaintsCount === 0) {
-      console.log('Migrating complaints from JSON to MongoDB...');
-      const jsonComplaints = await localDb.readFile('complaints');
-      if (jsonComplaints && jsonComplaints.length > 0) {
-        const docs = jsonComplaints.map(c => {
-          const { _id, ...rest } = c;
-          return rest;
-        });
-        await Complaint.insertMany(docs);
-        console.log(`✅ Migrated ${docs.length} complaints to MongoDB.`);
-      }
-    }
-  } catch (err) {
-    console.error('❌ Auto-migration failed:', err);
-  }
-});
+// Initialize local database
+localDb.initDB().then(() => console.log('Local database initialized'));
 
 // Middleware
 app.use(cors());
