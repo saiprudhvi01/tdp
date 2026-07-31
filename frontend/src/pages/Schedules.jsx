@@ -21,65 +21,18 @@ const Schedules = ({ isAdmin = false }) => {
     isPermanent: false
   });
 
-  // Default dummy schedules fallback if database is empty
-  const defaultSchedules = [
-    {
-      id: 1,
-      title: 'గ్రామ సదుపాయాల అభివృద్ధి కార్యక్రమం',
-      description: 'కొండేపి మండలంలో రోడ్లు, చిన్న కాలువలు మరియు వీధి దీపాల ఏర్పాటు గురించి అధికారులతో సమావేశం.',
-      date: '2026-08-05',
-      time: '09:30 AM',
-      location: 'కొండేపి',
-      village: 'కొండేపి',
-      mandal: 'కొండేపి',
-      category: 'Village Visits',
-      status: 'upcoming',
-      content: 'ఈ కార్యక్రమం ద్వారా మన గ్రామంలో రోడ్డు నిర్మాణం మరియు వీధి దీపాల ఏర్పాటు జరుగుతుంది.'
-    },
-    {
-      id: 2,
-      title: 'ప్రజా సమస్యల పరిష్కార శిబిరం',
-      description: 'ప్రజల సమస్యలను విని వెంటనే పరిష్కరించడానికి ప్రాంగణంలో ప్రత్యేక శిబిరం నిర్వహణ.',
-      date: '2026-07-31',
-      time: '10:00 AM',
-      location: 'ప్రకాశం',
-      village: 'ప్రకాశం',
-      mandal: 'ప్రకాశం',
-      category: 'Public Meetings',
-      status: 'ongoing',
-      content: 'శిబిరంలో ప్రజా వినతుల స్వీకరణ జరిగింది.'
-    },
-    {
-      id: 3,
-      title: 'విద్యార్థుల సహాయ నిధి పంపిణీ',
-      description: 'ఆర్థికంగా వెనుకబడిన విద్యార్థులకు స్కాలర్‌షిప్‌లు మరియు సహాయ నిధి పంపిణీ కార్యక్రమం.',
-      date: '2026-07-28',
-      time: '11:00 AM',
-      location: 'ఒంగోలు',
-      village: 'ఒంగోలు',
-      mandal: 'ఒంగోలు',
-      category: 'Events',
-      status: 'completed',
-      content: '100 మంది విద్యార్థులకు చెక్కుల పంపిణీ.'
-    }
-  ];
-
   const fetchSchedules = async () => {
     try {
       const response = await fetch('/api/schedules');
       if (response.ok) {
         const data = await response.json();
-        if (data && data.length > 0) {
-          setSchedules(data);
-        } else {
-          setSchedules(defaultSchedules);
-        }
+        setSchedules(data || []);
       } else {
-        setSchedules(defaultSchedules);
+        setSchedules([]);
       }
     } catch (error) {
       console.error('Error fetching schedules:', error);
-      setSchedules(defaultSchedules);
+      setSchedules([]);
     }
   };
 
