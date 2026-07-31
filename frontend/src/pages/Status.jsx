@@ -334,17 +334,17 @@ const Status = ({ isAdmin, isUser }) => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.25, delay: index * 0.04 }}
                       onClick={() => setActiveStoryIndex(index)}
-                      className="bg-[#FFF9E6]/90 backdrop-blur-md rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-[#F4B400]/40 flex flex-col group cursor-pointer relative h-full hover:-translate-y-1 hover:bg-[#FFF3D1]/95"
+                      className="bg-[#FFF9E6]/90 backdrop-blur-md rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-[#F4B400]/40 flex flex-col group cursor-pointer relative h-[250px] sm:h-[270px] w-full hover:-translate-y-1 hover:bg-[#FFF3D1]/95"
                     >
                       {/* Status Header / Type Badge */}
-                      <div className="p-2.5 flex items-center justify-between bg-[#FFF3D1]/80 backdrop-blur-sm z-10 border-b border-[#F4B400]/20">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-[#F4B400] flex items-center justify-center font-extrabold text-black text-[10px] shadow-sm">
+                      <div className="p-2 flex items-center justify-between bg-[#FFF3D1]/80 backdrop-blur-sm z-10 border-b border-[#F4B400]/20 flex-shrink-0">
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-6 h-6 rounded-full bg-[#F4B400] flex items-center justify-center font-extrabold text-black text-[9px] shadow-sm">
                             TDP
                           </div>
                           <div>
-                            <h4 className="text-[11px] sm:text-xs font-extrabold text-gray-900 leading-none">దామచర్ల జనార్ధన రావు</h4>
-                            <span className="text-[9px] text-gray-600 font-medium">{formattedDate}</span>
+                            <h4 className="text-[10px] sm:text-[11px] font-extrabold text-gray-900 leading-none">దామచర్ల జనార్ధన రావు</h4>
+                            <span className="text-[8px] sm:text-[9px] text-gray-600 font-medium">{formattedDate}</span>
                           </div>
                         </div>
 
@@ -353,21 +353,21 @@ const Status = ({ isAdmin, isUser }) => {
                           <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                             <button
                               onClick={(e) => handleOpenEditModal(status, e)}
-                              className="w-7 h-7 rounded-full bg-white/80 hover:bg-[#F4B400] hover:text-black text-gray-700 flex items-center justify-center transition-colors"
+                              className="w-6 h-6 rounded-full bg-white/80 hover:bg-[#F4B400] hover:text-black text-gray-700 flex items-center justify-center transition-colors"
                               title="సవరించు (Edit)"
                             >
-                              <Edit3 className="w-3.5 h-3.5" />
+                              <Edit3 className="w-3 h-3" />
                             </button>
                             <button
                               onClick={(e) => handleDeleteStatus(status._id, e)}
-                              className="w-7 h-7 rounded-full bg-red-100/80 hover:bg-red-200 text-red-700 flex items-center justify-center transition-colors"
+                              className="w-6 h-6 rounded-full bg-red-100/80 hover:bg-red-200 text-red-700 flex items-center justify-center transition-colors"
                               title="తొలగించు (Delete)"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              <Trash2 className="w-3 h-3" />
                             </button>
                           </div>
                         ) : (
-                          <span className="px-2 py-0.5 bg-[#F4B400]/20 text-amber-900 text-[9px] font-extrabold rounded-full uppercase tracking-wider flex items-center gap-1 border border-[#F4B400]/30">
+                          <span className="px-2 py-0.5 bg-[#F4B400]/20 text-amber-900 text-[8px] sm:text-[9px] font-extrabold rounded-full uppercase tracking-wider flex items-center gap-1 border border-[#F4B400]/30">
                             <Eye className="w-2.5 h-2.5" />
                             {status.type === 'video' ? 'వీడియో' : status.type === 'image' ? 'ఫోటో' : 'అప్‌డేట్'}
                           </span>
@@ -377,15 +377,15 @@ const Status = ({ isAdmin, isUser }) => {
                       {/* Status Media Container */}
                       {status.type === 'text' ? (
                         /* Text Status Card */
-                        <div className="h-[130px] sm:h-[145px] bg-gradient-to-br from-[#1F1F1F] via-[#2D2200] to-[#4A3B00] p-4 flex flex-col justify-center items-center text-center relative overflow-hidden">
+                        <div className="h-[110px] sm:h-[125px] flex-shrink-0 bg-gradient-to-br from-[#1F1F1F] via-[#2D2200] to-[#4A3B00] p-3 flex flex-col justify-center items-center text-center relative overflow-hidden">
                           <div className="absolute top-0 right-0 w-24 h-24 bg-[#F4B400]/10 rounded-full blur-xl pointer-events-none" />
-                          <p className="text-amber-300 text-xs sm:text-sm font-bold font-serif leading-relaxed line-clamp-3 relative z-10">
+                          <p className="text-amber-300 text-[11px] sm:text-xs font-bold font-serif leading-relaxed line-clamp-3 relative z-10">
                             "{status.content || status.title}"
                           </p>
                         </div>
                       ) : status.type === 'video' ? (
                         /* Video Status Card */
-                        <div className="relative h-[130px] sm:h-[145px] bg-black overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                        <div className="relative h-[110px] sm:h-[125px] flex-shrink-0 bg-black overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
                           {status.mediaUrl ? (
                             <video
                               src={status.mediaUrl}
@@ -393,18 +393,18 @@ const Status = ({ isAdmin, isUser }) => {
                             />
                           ) : (
                             <div className="w-full h-full bg-gray-900 flex items-center justify-center text-gray-500">
-                              <VideoIcon className="w-10 h-10" />
+                              <VideoIcon className="w-8 h-8" />
                             </div>
                           )}
                           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                            <div className="w-9 h-9 rounded-full bg-[#F4B400] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                              <Play className="w-4 h-4 text-black fill-black ml-0.5" />
+                            <div className="w-8 h-8 rounded-full bg-[#F4B400] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                              <Play className="w-3.5 h-3.5 text-black fill-black ml-0.5" />
                             </div>
                           </div>
                         </div>
                       ) : (
                         /* Image Status Card */
-                        <div className="relative h-[130px] sm:h-[145px] bg-gray-100 overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                        <div className="relative h-[110px] sm:h-[125px] flex-shrink-0 bg-gray-100 overflow-hidden group-hover:scale-105 transition-transform duration-500">
                           {status.mediaUrl ? (
                             <img
                               src={status.mediaUrl}
@@ -413,30 +413,30 @@ const Status = ({ isAdmin, isUser }) => {
                             />
                           ) : (
                             <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                              <ImageIcon className="w-10 h-10" />
+                              <ImageIcon className="w-8 h-8" />
                             </div>
                           )}
                         </div>
                       )}
 
                       {/* Status Title & Caption Body */}
-                      <div className="p-3 flex-1 flex flex-col justify-between bg-[#FFF9E6]/80 backdrop-blur-sm">
-                        <div>
+                      <div className="p-2.5 flex-1 min-h-0 flex flex-col justify-between bg-[#FFF9E6]/80 backdrop-blur-sm">
+                        <div className="overflow-hidden">
                           {status.title && (
-                            <h3 className="font-extrabold text-gray-900 text-xs sm:text-sm mb-1 leading-snug line-clamp-1">
+                            <h3 className="font-extrabold text-gray-900 text-[11px] sm:text-xs mb-0.5 leading-snug line-clamp-1 flex-shrink-0">
                               {status.title}
                             </h3>
                           )}
                           {status.content && status.type !== 'text' && (
-                            <p className="text-[11px] sm:text-xs text-gray-700 line-clamp-2 leading-tight">
+                            <p className="text-[10px] sm:text-[11px] text-gray-700 line-clamp-2 leading-tight">
                               {status.content}
                             </p>
                           )}
                         </div>
 
-                        <div className="mt-2 pt-1.5 border-t border-[#F4B400]/20 flex items-center justify-between text-[10px] font-extrabold text-amber-900">
+                        <div className="mt-1 pt-1 border-t border-[#F4B400]/20 flex items-center justify-between text-[9px] sm:text-[10px] font-extrabold text-amber-900 flex-shrink-0">
                           <span>క్లిక్ చేసి ఫుల్ చూడు (View Full Status)</span>
-                          <ChevronRight className="w-3.5 h-3.5 text-amber-800" />
+                          <ChevronRight className="w-3 h-3 text-amber-800" />
                         </div>
                       </div>
                     </motion.div>

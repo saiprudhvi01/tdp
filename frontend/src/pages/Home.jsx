@@ -28,6 +28,7 @@ const Home = () => {
   const [showChat, setShowChat] = useState(true);
   const [activeNewsIndex, setActiveNewsIndex] = useState(0);
   const [carouselPosition, setCarouselPosition] = useState(0);
+  const [selectedNews, setSelectedNews] = useState(null);
   const topSectionRef = useRef(null);
   const newsSectionRef = useRef(null);
 
@@ -413,39 +414,49 @@ const Home = () => {
               className="pb-12"
             >
               {newsItems.map((news) => (
-                <SwiperSlide key={news.id}>
-                  <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden h-[340px] sm:h-[360px] flex flex-col border border-amber-100 hover:shadow-2xl transition-shadow">
+                <SwiperSlide key={news.id} className="h-full py-1">
+                  <div
+                    onClick={() => setSelectedNews(news)}
+                    className="bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden h-[340px] sm:h-[360px] flex flex-col border border-amber-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer w-full"
+                  >
                     {/* 1. Image Section (Fixed Height & Never Shrinks) */}
-                    <div className="flex-shrink-0">
-                      <div className="px-4 pt-3 pb-2 flex items-center justify-between bg-white">
-                        <span className="inline-block px-3 py-1 bg-[#F4B400] text-black text-xs font-bold rounded-full shadow-sm">
+                    <div className="flex-shrink-0 relative">
+                      <div className="px-4 pt-3 pb-2 flex items-center justify-between bg-white border-b border-gray-100">
+                        <span className="inline-block px-3 py-1 bg-[#F4B400] text-black text-[11px] sm:text-xs font-black rounded-full shadow-sm">
                           {news.category}
                         </span>
-                        <div className="text-xs font-medium text-gray-500">{news.date}</div>
+                        <div className="text-[11px] font-semibold text-gray-500">{news.date}</div>
                       </div>
-                      <div className="relative w-full h-[130px] sm:h-[150px] overflow-hidden">
+                      <div className="relative w-full h-[140px] sm:h-[155px] flex-shrink-0 overflow-hidden bg-gray-100">
                         <img
                           src={news.image}
                           alt={news.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
                     </div>
 
-                    {/* 2. Content/Text Section (Flexible & Truncated with Ellipsis) */}
-                    <div className="p-4 flex-1 min-h-0 flex flex-col overflow-hidden">
-                      <h3 className="text-sm sm:text-base font-bold text-gray-900 mb-1.5 leading-snug line-clamp-1 flex-shrink-0">
-                        {news.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-3 overflow-hidden text-ellipsis">
-                        {news.description}
-                      </p>
-                    </div>
+                    {/* 2. Content/Text Section (Strict Clamped Limits & Shrinks gracefully) */}
+                    <div className="p-3.5 sm:p-4 flex-1 min-h-0 flex flex-col justify-between overflow-hidden bg-white">
+                      <div className="overflow-hidden">
+                        <h3 className="text-xs sm:text-sm font-extrabold text-gray-900 mb-1 leading-snug line-clamp-1 flex-shrink-0">
+                          {news.title}
+                        </h3>
+                        <p className="text-[11px] sm:text-xs text-gray-600 leading-relaxed line-clamp-2 overflow-hidden text-ellipsis">
+                          {news.description}
+                        </p>
+                      </div>
 
-                    {/* 3. Location Section (Fixed & Never Compressed) */}
-                    <div className="flex-shrink-0 px-4 py-3 border-t border-gray-100 bg-gray-50/50 flex items-center gap-1.5">
-                      <span className="w-2 h-2 bg-[#F4B400] rounded-full flex-shrink-0" />
-                      <span className="text-xs font-semibold text-gray-600 truncate">{news.location}</span>
+                      {/* 3. View Full Action Link & Location Footer */}
+                      <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between text-[11px] font-extrabold text-amber-900 flex-shrink-0">
+                        <span className="flex items-center gap-1">
+                          <span className="w-2 h-2 bg-[#F4B400] rounded-full flex-shrink-0" />
+                          <span className="text-gray-600 truncate max-w-[110px] sm:max-w-[140px]">{news.location}</span>
+                        </span>
+                        <span className="flex items-center gap-1 text-[#B22222] hover:underline font-black">
+                          పూర్తి సమాచారం (View Full) <ChevronRight className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </SwiperSlide>
@@ -466,6 +477,61 @@ const Home = () => {
         </section>
 
       </div>
+
+      {/* Full News Detail Modal Popup */}
+      {selectedNews && (
+        <div
+          onClick={() => setSelectedNews(null)}
+          className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl overflow-hidden shadow-2xl max-w-2xl w-full border border-amber-300 relative my-auto max-h-[90vh] flex flex-col"
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedNews(null)}
+              className="absolute top-3 right-3 z-20 w-9 h-9 bg-black/60 hover:bg-black text-white rounded-full flex items-center justify-center transition-colors shadow-lg cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Modal Image */}
+            <div className="relative w-full h-[220px] sm:h-[300px] bg-black flex-shrink-0">
+              <img
+                src={selectedNews.image}
+                alt={selectedNews.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute bottom-3 left-4 flex items-center gap-2">
+                <span className="px-3 py-1 bg-[#F4B400] text-black font-black text-xs rounded-full shadow-md">
+                  {selectedNews.category}
+                </span>
+                <span className="px-3 py-1 bg-black/70 text-white font-semibold text-xs rounded-full backdrop-blur-sm">
+                  {selectedNews.date}
+                </span>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="flex items-center gap-2 text-xs font-extrabold text-amber-800 mb-2">
+                <span className="w-2.5 h-2.5 bg-[#F4B400] rounded-full" />
+                <span>{selectedNews.location}</span>
+              </div>
+              <h2 className="text-lg sm:text-2xl font-black text-gray-900 mb-3 leading-snug">
+                {selectedNews.title}
+              </h2>
+              <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-medium whitespace-pre-line">
+                {selectedNews.description}
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       <Footer />
 
