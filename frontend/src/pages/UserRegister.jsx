@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ArrowRight, User, Phone, MapPin } from 'lucide-react';
+import { ArrowRight, User } from 'lucide-react';
 
 const UserRegister = () => {
   const { t } = useLanguage();
@@ -51,145 +51,140 @@ const UserRegister = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      {/* Background with cultural overlay */}
-      <div className="absolute inset-0 bg-gradient-gold"></div>
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-[url('/images/p9.jpg')] bg-cover bg-center"></div>
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* Background image with opacity 50% */}
+      <div className="absolute inset-0 z-0 -z-10">
+        <div
+          className="absolute inset-0 bg-cover bg-center blur-sm opacity-50"
+          style={{
+            backgroundImage: "url('/bgimages/login.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            filter: 'contrast(0.8) brightness(0.9)',
+            opacity: 0.5
+          }}
+        ></div>
+        {/* Light overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/20"></div>
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/15 via-transparent to-black/25"></div>
       </div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 w-full max-w-md"
+        className="relative z-10 w-full max-w-md my-auto"
       >
         <div className="glass-card p-8 md:p-10">
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <User className="w-8 h-8 text-text-primary" />
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border-2 border-primary-yellow">
+              <User className="w-8 h-8 text-black" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
               {t('register')}
             </h1>
-            <p className="text-text-secondary">{t('pleaseLogin')}</p>
+            <p className="text-white">{t('pleaseLogin')}</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-white mb-1.5">
                 {t('name')}
               </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-light" />
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="glass-input w-full pl-10"
-                  placeholder="Full Name"
-                />
-              </div>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="glass-input w-full text-black placeholder-gray-700"
+                placeholder="Full Name"
+              />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-white mb-1.5">
                 {t('email')}
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-light" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="glass-input w-full pl-10"
-                  placeholder="your@email.com"
-                />
-              </div>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="glass-input w-full text-black placeholder-gray-700"
+                placeholder="your@email.com"
+              />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-white mb-1.5">
                 {t('phone')}
               </label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-light" />
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  className="glass-input w-full pl-10"
-                  placeholder="+91 98765 43210"
-                />
-              </div>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                className="glass-input w-full text-black placeholder-gray-700"
+                placeholder="+91 98765 43210"
+              />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-2">
+                <label className="block text-sm font-medium text-white mb-1.5">
                   {t('village')}
                 </label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-light" />
-                  <input
-                    type="text"
-                    name="village"
-                    value={formData.village}
-                    onChange={handleChange}
-                    className="glass-input w-full pl-10"
-                    placeholder="Village"
-                  />
-                </div>
+                <input
+                  type="text"
+                  name="village"
+                  value={formData.village}
+                  onChange={handleChange}
+                  className="glass-input w-full text-black placeholder-gray-700"
+                  placeholder="Village"
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-2">
+                <label className="block text-sm font-medium text-white mb-1.5">
                   {t('mandal')}
                 </label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-light" />
-                  <input
-                    type="text"
-                    name="mandal"
-                    value={formData.mandal}
-                    onChange={handleChange}
-                    className="glass-input w-full pl-10"
-                    placeholder="Mandal"
-                  />
-                </div>
+                <input
+                  type="text"
+                  name="mandal"
+                  value={formData.mandal}
+                  onChange={handleChange}
+                  className="glass-input w-full text-black placeholder-gray-700"
+                  placeholder="Mandal"
+                />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-white mb-1.5">
                 {t('password')}
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-light" />
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="glass-input w-full pl-10"
-                  placeholder="••••••••"
-                />
-              </div>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="glass-input w-full text-black placeholder-gray-700"
+                placeholder="••••••••"
+              />
             </div>
 
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="btn-primary w-full flex items-center justify-center space-x-2"
+              className="btn-primary w-full flex items-center justify-center space-x-2 mt-6"
             >
               <span>{t('signUp')}</span>
               <ArrowRight className="w-5 h-5" />
@@ -198,17 +193,17 @@ const UserRegister = () => {
 
           {/* Login Link */}
           <div className="mt-6 text-center">
-            <p className="text-text-secondary">
+            <p className="text-white">
               {t('alreadyHaveAccount')}{' '}
-              <Link to="/user/login" className="text-primary-yellow font-semibold hover:underline">
+              <Link to="/user/login" className="text-primary-yellow font-bold hover:underline ml-1">
                 {t('signIn')}
               </Link>
             </p>
           </div>
 
           {/* Quotes */}
-          <div className="mt-8 pt-6 border-t border-primary-yellow/20 text-center">
-            <p className="text-sm text-text-light italic">
+          <div className="mt-6 pt-4 border-t border-primary-yellow/20 text-center">
+            <p className="text-sm text-white italic">
               {t('quote1')}
             </p>
           </div>

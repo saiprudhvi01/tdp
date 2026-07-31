@@ -9,6 +9,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
 import Schedules from './pages/Schedules';
 import Status from './pages/Status';
+import FloatingChat from './components/FloatingChat';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -24,11 +25,11 @@ function App() {
     <LanguageProvider>
       <Router>
         <div className="min-h-screen">
-          <Header 
-            isAdmin={isAdmin} 
-            isUser={isUser} 
-            setIsAdmin={setIsAdmin} 
-            setIsUser={setIsUser} 
+          <Header
+            isAdmin={isAdmin}
+            isUser={isUser}
+            setIsAdmin={setIsAdmin}
+            setIsUser={setIsUser}
           />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -37,15 +38,16 @@ function App() {
             <Route path="/user/login" element={<UserLogin setIsUser={setIsUser} />} />
             <Route path="/user/register" element={<UserRegister />} />
             <Route path="/admin/login" element={<AdminLogin setIsAdmin={setIsAdmin} />} />
-            <Route 
-              path="/admin/dashboard" 
-              element={isAdmin ? <AdminDashboard setIsAdmin={setIsAdmin} /> : <Navigate to="/admin/login" />} 
+            <Route
+              path="/admin/dashboard"
+              element={isAdmin ? <AdminDashboard setIsAdmin={setIsAdmin} /> : <Navigate to="/admin/login" />}
             />
-            <Route 
-              path="/user/dashboard" 
-              element={isUser ? <UserDashboard setIsUser={setIsUser} /> : <Navigate to="/user/login" />} 
+            <Route
+              path="/user/dashboard"
+              element={isUser ? <UserDashboard setIsUser={setIsUser} /> : <Navigate to="/user/login" />}
             />
           </Routes>
+          <FloatingChat isAdmin={isAdmin} isUser={isUser} />
         </div>
       </Router>
     </LanguageProvider>

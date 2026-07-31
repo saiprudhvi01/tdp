@@ -14,10 +14,10 @@ const UserLogin = ({ setIsUser }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const email = formData.email.trim();
     const password = formData.password.trim();
-    
+
     try {
       const response = await fetch('/api/auth/user/login', {
         method: 'POST',
@@ -54,14 +54,15 @@ const UserLogin = ({ setIsUser }) => {
     <div className="h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0 -z-10">
-        <div 
-          className="absolute inset-0 bg-cover bg-center blur-sm"
-          style={{ 
+        <div
+          className="absolute inset-0 bg-cover bg-center blur-sm opacity-50"
+          style={{
             backgroundImage: "url('/bgimages/login.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-            filter: 'contrast(0.8) brightness(0.9)'
+            filter: 'contrast(0.8) brightness(0.9)',
+            opacity: 0.5
           }}
         ></div>
         {/* Light overlay for better text readability */}

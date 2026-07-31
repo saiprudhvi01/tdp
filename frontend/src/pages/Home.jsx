@@ -1,18 +1,19 @@
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Users, 
-  Heart, 
-  TrendingUp, 
-  ChevronUp, 
+import {
+  ChevronLeft,
+  ChevronRight,
+  Users,
+  Heart,
+  TrendingUp,
+  ChevronUp,
   ChevronDown,
   Grid,
   LayoutGrid,
-  MessageCircle, 
-  X 
+  MessageCircle,
+  X
 } from 'lucide-react';
 import Footer from '../components/Footer';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -150,14 +151,27 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [newsItems.length]);
 
+  const handleChatClick = () => {
+    const isAdmin = !!localStorage.getItem('adminToken');
+    const isUser = !!localStorage.getItem('userToken');
+
+    if (isAdmin) {
+      navigate('/admin/dashboard');
+    } else if (isUser) {
+      navigate('/user/dashboard');
+    } else {
+      navigate('/user/login');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white relative font-sans overflow-x-hidden w-full">
-      
+
       {/* Fixed Background Image */}
       <div className="fixed inset-0 z-0">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ 
+          style={{
             backgroundImage: "url('/bgimages/bg image final.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center'
@@ -170,163 +184,163 @@ const Home = () => {
 
       {/* Main Content Overlay */}
       <div className="relative z-10 flex flex-col min-h-screen justify-between pb-6 md:pb-12">
-        
+
         {/* Leaders Showcase - Static Grid */}
         <section ref={topSectionRef} style={{ scrollMarginTop: '90px' }} className="py-2 md:py-4 relative w-full flex items-center justify-center px-2 sm:px-4">
-          
+
           {/* Cards Grid */}
           <div className="relative z-10 w-full max-w-[95%] sm:max-w-[85%] md:max-w-[80%] lg:max-w-[73%] mx-auto perspective-[1800px]">
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-3 md:gap-4 w-full" style={{ transformStyle: 'preserve-3d' }}>
-            {leaders.map((leader, index) => {
-              const isActive = index === activeCardIndex;
-              return (
-                <motion.div
-                  key={leader.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ 
-                    opacity: 1, 
-                    scale: isActive ? 1.05 : 1,
-                    translateZ: isActive ? 40 : 0,
-                    y: isActive ? -5 : 0,
-                    rotateX: isActive ? 0 : -2
-                  }}
-                  transition={{ 
-                    duration: 0.6,
-                    delay: index * 0.1,
-                    ease: [0.25, 0.1, 0.25, 1]
-                  }}
-                  onClick={() => setActiveCardIndex(index)}
-                  className={`cursor-pointer w-full h-[160px] sm:h-[220px] md:h-[340px] lg:h-[380px] rounded-[16px] sm:rounded-[20px] md:rounded-[32px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
-                    ${isActive 
-                      ? 'border-3 sm:border-4 md:border-5 border-[#F4B400] shadow-[0_0_20px_rgba(244,180,0,0.6),0_0_40px_rgba(244,180,0,0.4)] sm:shadow-[0_0_30px_rgba(244,180,0,0.6),0_0_60px_rgba(244,180,0,0.4),0_0_90px_rgba(244,180,0,0.2)] z-20' 
-                      : 'border-2 sm:border-3 md:border-4 border-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.18)] sm:shadow-[0_18px_40px_rgba(0,0,0,0.18)] hover:border-[#F4B400]/70 z-10'
-                    }`}
-                  style={{ transformStyle: 'preserve-3d' }}
-                >
-                  {/* Premium Multi-Layer Glow for Active Card */}
-                  {isActive && (
-                    <>
-                      {/* Outer glow layer 1 */}
-                      <motion.div
-                        className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] -z-10"
-                        animate={{ 
-                          boxShadow: [
-                            '0 0 30px rgba(244, 180, 0, 0.3)',
-                            '0 0 60px rgba(244, 180, 0, 0.5)',
-                            '0 0 30px rgba(244, 180, 0, 0.3)'
-                          ]
-                        }}
-                        transition={{ 
-                          duration: 2.5,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                        style={{
-                          background: 'radial-gradient(circle at center, rgba(244,180,0,0.15) 0%, transparent 60%)'
-                        }}
-                      />
-                      {/* Outer glow layer 2 - different color */}
-                      <motion.div
-                        className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] -z-10"
-                        animate={{ 
-                          boxShadow: [
-                            '0 0 25px rgba(255, 213, 79, 0.25)',
-                            '0 0 50px rgba(255, 213, 79, 0.4)',
-                            '0 0 25px rgba(255, 213, 79, 0.25)'
-                          ]
-                        }}
-                        transition={{ 
-                          duration: 2.5,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: 0.5
-                        }}
-                        style={{
-                          background: 'radial-gradient(circle at center, rgba(255,213,79,0.1) 0%, transparent 50%)'
-                        }}
-                      />
-                      {/* Animated border gradient */}
-                      <motion.div
-                        className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] -z-10"
-                        style={{
-                          background: 'conic-gradient(from 0deg, transparent, #F4B400, transparent, #FFD54F, transparent)',
-                          opacity: 0.3
-                        }}
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                      />
-                      {/* Spotlight effect */}
-                      <motion.div
-                        className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] -z-10"
-                        animate={{
-                          background: [
-                            'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)',
-                            'radial-gradient(circle at 70% 70%, rgba(255,255,255,0.3) 0%, transparent 50%)',
-                            'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)'
-                          ]
-                        }}
-                        transition={{
-                          duration: 4,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      />
-                    </>
-                  )}
-                  {/* 3D Depth/Thickness Effect - Side Face */}
-                  <div 
-                    className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] bg-gradient-to-br from-[#E8E0D0] to-[#D8D0C0] -z-10"
-                    style={{ 
-                      transform: 'translateZ(-10px)',
-                      boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
-                    }} 
-                  />
-                  
-                  {/* 3D Depth/Thickness Effect - Bottom Face */}
-                  <div 
-                    className="absolute bottom-0 left-0 right-0 h-4 sm:h-6 md:h-8 rounded-b-[16px] sm:rounded-b-[20px] md:rounded-b-[32px] bg-gradient-to-b from-[#D8D0C0] to-[#C8C0B0] -z-20"
-                    style={{ 
-                      transform: 'translateZ(-10px) translateY(6px)',
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.4)'
-                    }} 
-                  />
-                  
-                  {/* Image Container - photo fills width, cropped at top, no inner box/padding */}
-                  <div className="relative w-full overflow-hidden bg-gradient-to-b from-[#F8F5EE] to-[#F6F1E8]" style={{ height: '70%' }}>
-                    <img
-                      src={leader.image}
-                      alt={leader.name}
-                      className="w-full h-full object-contain"
-                      style={{ objectPosition: 'center top' }}
+              {leaders.map((leader, index) => {
+                const isActive = index === activeCardIndex;
+                return (
+                  <motion.div
+                    key={leader.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{
+                      opacity: 1,
+                      scale: isActive ? 1.05 : 1,
+                      translateZ: isActive ? 40 : 0,
+                      y: isActive ? -5 : 0,
+                      rotateX: isActive ? 0 : -2
+                    }}
+                    transition={{
+                      duration: 0.6,
+                      delay: index * 0.1,
+                      ease: [0.25, 0.1, 0.25, 1]
+                    }}
+                    onClick={() => setActiveCardIndex(index)}
+                    className={`cursor-pointer w-full h-[160px] sm:h-[220px] md:h-[340px] lg:h-[380px] rounded-[16px] sm:rounded-[20px] md:rounded-[32px] overflow-hidden relative bg-[#FBF8F2] transition-all duration-500
+                    ${isActive
+                        ? 'border-3 sm:border-4 md:border-5 border-[#F4B400] shadow-[0_0_20px_rgba(244,180,0,0.6),0_0_40px_rgba(244,180,0,0.4)] sm:shadow-[0_0_30px_rgba(244,180,0,0.6),0_0_60px_rgba(244,180,0,0.4),0_0_90px_rgba(244,180,0,0.2)] z-20'
+                        : 'border-2 sm:border-3 md:border-4 border-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.18)] sm:shadow-[0_18px_40px_rgba(0,0,0,0.18)] hover:border-[#F4B400]/70 z-10'
+                      }`}
+                    style={{ transformStyle: 'preserve-3d' }}
+                  >
+                    {/* Premium Multi-Layer Glow for Active Card */}
+                    {isActive && (
+                      <>
+                        {/* Outer glow layer 1 */}
+                        <motion.div
+                          className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] -z-10"
+                          animate={{
+                            boxShadow: [
+                              '0 0 30px rgba(244, 180, 0, 0.3)',
+                              '0 0 60px rgba(244, 180, 0, 0.5)',
+                              '0 0 30px rgba(244, 180, 0, 0.3)'
+                            ]
+                          }}
+                          transition={{
+                            duration: 2.5,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                          style={{
+                            background: 'radial-gradient(circle at center, rgba(244,180,0,0.15) 0%, transparent 60%)'
+                          }}
+                        />
+                        {/* Outer glow layer 2 - different color */}
+                        <motion.div
+                          className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] -z-10"
+                          animate={{
+                            boxShadow: [
+                              '0 0 25px rgba(255, 213, 79, 0.25)',
+                              '0 0 50px rgba(255, 213, 79, 0.4)',
+                              '0 0 25px rgba(255, 213, 79, 0.25)'
+                            ]
+                          }}
+                          transition={{
+                            duration: 2.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 0.5
+                          }}
+                          style={{
+                            background: 'radial-gradient(circle at center, rgba(255,213,79,0.1) 0%, transparent 50%)'
+                          }}
+                        />
+                        {/* Animated border gradient */}
+                        <motion.div
+                          className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] -z-10"
+                          style={{
+                            background: 'conic-gradient(from 0deg, transparent, #F4B400, transparent, #FFD54F, transparent)',
+                            opacity: 0.3
+                          }}
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        />
+                        {/* Spotlight effect */}
+                        <motion.div
+                          className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] -z-10"
+                          animate={{
+                            background: [
+                              'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)',
+                              'radial-gradient(circle at 70% 70%, rgba(255,255,255,0.3) 0%, transparent 50%)',
+                              'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)'
+                            ]
+                          }}
+                          transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      </>
+                    )}
+                    {/* 3D Depth/Thickness Effect - Side Face */}
+                    <div
+                      className="absolute inset-0 rounded-[16px] sm:rounded-[20px] md:rounded-[32px] bg-gradient-to-br from-[#E8E0D0] to-[#D8D0C0] -z-10"
+                      style={{
+                        transform: 'translateZ(-10px)',
+                        boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
+                      }}
                     />
-                    {/* subtle fade at bottom of image into card body */}
-                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#FBF8F2] to-transparent" />
-                  </div>
 
-                  {/* Card Content Footer */}
-                  <div className="px-1.5 sm:px-2 pt-1 sm:pt-1.5 pb-1 sm:pb-2 text-center flex flex-col items-center justify-center">
-                    <h3 className="text-[11px] sm:text-sm md:text-base lg:text-lg font-black text-[#B22222] tracking-tight leading-tight line-clamp-2">
-                      {leader.name}
-                    </h3>
-                    
-                    {/* Decorative Divider */}
-                    <div className="w-6 sm:w-8 md:w-10 h-[2px] bg-gradient-to-r from-[#F4B400] to-[#FFD54F] rounded-full my-0.5 sm:my-1 md:my-1.5" />
+                    {/* 3D Depth/Thickness Effect - Bottom Face */}
+                    <div
+                      className="absolute bottom-0 left-0 right-0 h-4 sm:h-6 md:h-8 rounded-b-[16px] sm:rounded-b-[20px] md:rounded-b-[32px] bg-gradient-to-b from-[#D8D0C0] to-[#C8C0B0] -z-20"
+                      style={{
+                        transform: 'translateZ(-10px) translateY(6px)',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.4)'
+                      }}
+                    />
 
-                    <p className="text-[8px] sm:text-[10px] md:text-xs lg:text-sm font-semibold text-[#555555] leading-snug line-clamp-2">
-                      {leader.designation}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
+                    {/* Image Container - photo fills width, cropped at top, no inner box/padding */}
+                    <div className="relative w-full overflow-hidden bg-gradient-to-b from-[#F8F5EE] to-[#F6F1E8]" style={{ height: '70%' }}>
+                      <img
+                        src={leader.image}
+                        alt={leader.name}
+                        className="w-full h-full object-contain"
+                        style={{ objectPosition: 'center top' }}
+                      />
+                      {/* subtle fade at bottom of image into card body */}
+                      <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#FBF8F2] to-transparent" />
+                    </div>
+
+                    {/* Card Content Footer */}
+                    <div className="px-1.5 sm:px-2 pt-1 sm:pt-1.5 pb-1 sm:pb-2 text-center flex flex-col items-center justify-center">
+                      <h3 className="text-[11px] sm:text-sm md:text-base lg:text-lg font-black text-[#B22222] tracking-tight leading-tight line-clamp-2">
+                        {leader.name}
+                      </h3>
+
+                      {/* Decorative Divider */}
+                      <div className="w-6 sm:w-8 md:w-10 h-[2px] bg-gradient-to-r from-[#F4B400] to-[#FFD54F] rounded-full my-0.5 sm:my-1 md:my-1.5" />
+
+                      <p className="text-[8px] sm:text-[10px] md:text-xs lg:text-sm font-semibold text-[#555555] leading-snug line-clamp-2">
+                        {leader.designation}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
 
             {/* Swipe Scroll Indicator - Scrolls DOWN to News section */}
-            <div 
+            <div
               onClick={() => newsSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
               className="flex flex-col items-center justify-center mt-3 sm:mt-4 gap-1 cursor-pointer group"
             >
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   newsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -349,28 +363,28 @@ const Home = () => {
             <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-2 md:mb-3">
               {/* Left decorative line */}
               <div className="h-[2px] w-8 sm:w-12 md:w-16 bg-[#D4A017]" />
-              
+
               {/* Diamond ornament */}
               <div className="w-2 h-2 md:w-3 md:h-3 rotate-45 bg-[#D4A017]" />
-              
+
               {/* Main heading */}
               <h2 className="text-[20px] sm:text-[24px] md:text-[32px] lg:text-[36px] font-bold text-[#4A2A1F] leading-[1.2] tracking-normal font-serif">
                 మా కార్యక్రమాలు
               </h2>
-              
+
               {/* Diamond ornament */}
               <div className="w-2 h-2 md:w-3 md:h-3 rotate-45 bg-[#D4A017]" />
-              
+
               {/* Right decorative line */}
               <div className="h-[2px] w-8 sm:w-12 md:w-16 bg-[#D4A017]" />
             </div>
-            
+
             {/* Subtitle */}
             <p className="text-[12px] sm:text-[14px] md:text-[16px] font-medium text-[#555555] leading-[1.5]">
               లేటెస్ట్ న్యూస్ / కార్యక్రమాల సమాచారం
             </p>
           </div>
-          
+
           <div className="relative z-10 w-full px-4 sm:px-12 md:px-16 max-w-7xl mx-auto">
             {/* Swiper Carousel View */}
             <Swiper
@@ -417,7 +431,7 @@ const Home = () => {
                         />
                       </div>
                     </div>
-                    
+
                     {/* 2. Content/Text Section (Flexible & Truncated with Ellipsis) */}
                     <div className="p-4 flex-1 min-h-0 flex flex-col overflow-hidden">
                       <h3 className="text-sm sm:text-base font-bold text-gray-900 mb-1.5 leading-snug line-clamp-1 flex-shrink-0">
@@ -452,41 +466,6 @@ const Home = () => {
         </section>
 
       </div>
-
-      {/* Floating Customer Help / Chat Assistant Bubble */}
-      {showChat && (
-        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex items-end gap-2 sm:gap-3">
-          {/* Chat Tooltip Bubble */}
-          <div className="relative bg-white text-gray-900 rounded-xl sm:rounded-2xl p-2.5 sm:p-3 px-3 sm:px-4 shadow-2xl border border-gray-200 text-[11px] sm:text-xs font-medium max-w-[160px] sm:max-w-[200px]">
-            <button 
-              onClick={() => setShowChat(false)}
-              className="absolute -top-2 -left-2 bg-gray-200 hover:bg-gray-300 rounded-full p-0.5 text-gray-600"
-            >
-              <X className="w-3 h-3" />
-            </button>
-            <p className="font-bold text-gray-800">మీ సమస్యకు మేమున్నాం</p>
-            <p className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5">ఇప్పుడే ఫిర్యాదు నమోదు చేయండి.</p>
-            
-            {/* Bubble Tail */}
-            <div className="absolute -right-[13px] bottom-4">
-              <svg
-                width="20"
-                height="30"
-                viewBox="0 0 20 30"
-                fill="white"
-              >
-                <path d="M0 0 L20 15 L0 30 Z" />
-              </svg>
-            </div>
-          </div>
-
-          {/* Floating Action Button */}
-          <button className="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-r from-[#F4B400] to-[#FFD54F] rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(244,180,0,0.5),0_0_50px_rgba(244,180,0,0.3)] border-2 sm:border-4 border-white hover:scale-105 transition-transform relative">
-            <span className="absolute top-0 right-0 w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 bg-red-600 border-2 border-white rounded-full" />
-            <MessageCircle className="w-5 h-5 sm:w-7 sm:h-7 text-black fill-black" />
-          </button>
-        </div>
-      )}
 
       <Footer />
 
