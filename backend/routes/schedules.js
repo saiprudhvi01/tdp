@@ -5,10 +5,16 @@ const auth = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
 
+const fs = require('fs');
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../uploads/'));
+    const uploadPath = path.join(__dirname, '../uploads/');
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -51,16 +57,18 @@ router.post('/', upload.fields([
   { name: 'videos', maxCount: 5 }
 ]), async (req, res) => {
   try {
-    const { title, description, date, location, village, mandal, isPermanent, status, content } = req.body;
+    const { title, description, date, time, location, village, mandal, category, isPermanent, status, content } = req.body;
     const files = req.files || {};
 
     const scheduleData = {
       title,
       description,
-      date: new Date(date),
+      date: date ? new Date(date) : undefined,
+      time,
       location,
       village,
       mandal,
+      category: category || 'Event',
       isPermanent: isPermanent === 'true',
       status: status || 'upcoming',
       content: content || ''
@@ -109,16 +117,18 @@ router.put('/:id', upload.fields([
   { name: 'videos', maxCount: 5 }
 ]), async (req, res) => {
   try {
-    const { title, description, date, location, village, mandal, isPermanent, status, content } = req.body;
+    const { title, description, date, time, location, village, mandal, category, isPermanent, status, content } = req.body;
     const files = req.files || {};
 
     const updates = {};
     if (title) updates.title = title;
     if (description) updates.description = description;
     if (date) updates.date = new Date(date);
+    if (time) updates.time = time;
     if (location) updates.location = location;
     if (village) updates.village = village;
     if (mandal) updates.mandal = mandal;
+    if (category) updates.category = category;
     if (isPermanent !== undefined) updates.isPermanent = isPermanent === 'true';
     if (status) updates.status = status;
     if (content !== undefined) updates.content = content;
