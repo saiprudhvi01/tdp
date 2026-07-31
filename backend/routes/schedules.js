@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../data/database');
+const Schedule = require('../models/Schedule');
 const auth = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
@@ -35,7 +35,7 @@ const upload = multer({
 // Get all schedules (public)
 router.get('/', async (req, res) => {
   try {
-    const schedules = await db.find('schedules');
+    const schedules = await Schedule.find().lean();
     schedules.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
     res.json(schedules);
   } catch (error) {
@@ -57,7 +57,7 @@ router.post('/', upload.fields([
     const scheduleData = {
       title,
       description,
-      date: new Date(date).toISOString(),
+      date: new Date(date),
       location,
       village,
       mandal,
@@ -79,7 +79,7 @@ router.post('/', upload.fields([
       scheduleData.videos = files.videos.map(file => file.filename);
     }
 
-    const schedule = await db.create('schedules', scheduleData);
+    const schedule = await Schedule.create(scheduleData);
 
     res.json(schedule);
   } catch (error) {
@@ -91,7 +91,7 @@ router.post('/', upload.fields([
 // Get schedule by ID
 router.get('/:id', async (req, res) => {
   try {
-    const schedule = await db.findById('schedules', req.params.id);
+    const schedule = await Schedule.findById(req.params.id).lean();
     if (!schedule) {
       return res.status(404).json({ message: 'Schedule not found' });
     }
@@ -115,7 +115,7 @@ router.put('/:id', upload.fields([
     const updates = {};
     if (title) updates.title = title;
     if (description) updates.description = description;
-    if (date) updates.date = new Date(date).toISOString();
+    if (date) updates.date = new Date(date);
     if (location) updates.location = location;
     if (village) updates.village = village;
     if (mandal) updates.mandal = mandal;
@@ -128,7 +128,7 @@ router.put('/:id', upload.fields([
     if (files.gallery) updates.gallery = files.gallery.map(file => file.filename);
     if (files.videos) updates.videos = files.videos.map(file => file.filename);
 
-    const schedule = await db.updateById('schedules', req.params.id, updates);
+    const schedule = await Schedule.findByIdAndUpdate(req.params.id, updates, { new: true }).lean();
     if (!schedule) {
       return res.status(404).json({ message: 'Schedule not found' });
     }
@@ -141,7 +141,7 @@ router.put('/:id', upload.fields([
 // Delete schedule (admin only)
 router.delete('/:id', async (req, res) => {
   try {
-    const deleted = await db.deleteById('schedules', req.params.id);
+    const deleted = await Schedule.findByIdAndDelete(req.params.id);
     if (deleted) {
       res.json({ message: 'Schedule deleted' });
     } else {
@@ -156,7 +156,7 @@ router.delete('/:id', async (req, res) => {
 router.patch('/:id/status', async (req, res) => {
   try {
     const { status } = req.body;
-    const schedule = await db.updateById('schedules', req.params.id, { status });
+    const schedule = await Schedule.findByIdAndUpdate(req.params.id, { status }, { new: true }).lean();
     if (!schedule) {
       return res.status(404).json({ message: 'Schedule not found' });
     }
@@ -172,7 +172,7 @@ router.patch('/:id/content', upload.fields([
   { name: 'videos', maxCount: 5 }
 ]), async (req, res) => {
   try {
-    const existingSchedule = await db.findById('schedules', req.params.id);
+    const existingSchedule = await Schedule.findById(req.params.id).lean();
     if (!existingSchedule) {
       return res.status(404).json({ message: 'Schedule not found' });
     }
@@ -191,7 +191,7 @@ router.patch('/:id/content', upload.fields([
       updates.videos = [...(existingSchedule.videos || []), ...newVideos];
     }
 
-    const schedule = await db.updateById('schedules', req.params.id, updates);
+    const schedule = await Schedule.findByIdAndUpdate(req.params.id, updates, { new: true }).lean();
     res.json(schedule);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

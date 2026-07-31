@@ -6,22 +6,38 @@ const scheduleSchema = new mongoose.Schema({
     required: true
   },
   description: {
-    type: String,
-    required: true
+    type: String
   },
   date: {
-    type: Date,
-    required: true
+    type: Date
+  },
+  time: {
+    type: String
   },
   location: {
-    type: String,
-    required: true
+    type: String
   },
   village: {
     type: String
   },
   mandal: {
     type: String
+  },
+  category: {
+    type: String,
+    default: 'Event'
+  },
+  status: {
+    type: String,
+    enum: ['upcoming', 'ongoing', 'completed', 'cancelled', 'pending'],
+    default: 'upcoming'
+  },
+  content: {
+    type: String
+  },
+  isPermanent: {
+    type: Boolean,
+    default: false
   },
   primaryImage: {
     type: String
@@ -34,36 +50,9 @@ const scheduleSchema = new mongoose.Schema({
   }],
   videos: [{
     type: String
-  }],
-  content: {
-    type: String
-  },
-  isPermanent: {
-    type: Boolean,
-    default: false
-  },
-  status: {
-    type: String,
-    enum: ['upcoming', 'completed', 'ongoing', 'cancelled'],
-    default: 'upcoming'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  expiresAt: {
-    type: Date
-  }
-});
-
-// Auto-set expiration date if not permanent
-scheduleSchema.pre('save', function(next) {
-  if (!this.isPermanent && !this.expiresAt) {
-    const expirationDate = new Date(this.createdAt);
-    expirationDate.setDate(expirationDate.getDate() + 30);
-    this.expiresAt = expirationDate;
-  }
-  next();
+  }]
+}, {
+  timestamps: true // Automatically manages createdAt and updatedAt
 });
 
 module.exports = mongoose.model('Schedule', scheduleSchema);

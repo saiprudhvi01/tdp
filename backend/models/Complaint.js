@@ -1,15 +1,6 @@
 const mongoose = require('mongoose');
 
 const complaintSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  userName: {
-    type: String,
-    required: true
-  },
   subject: {
     type: String,
     required: true
@@ -20,10 +11,15 @@ const complaintSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['infrastructure', 'water', 'electricity', 'roads', 'healthcare', 'education', 'other'],
     default: 'other'
   },
   village: {
+    type: String
+  },
+  userId: {
+    type: String
+  },
+  userName: {
     type: String
   },
   status: {
@@ -31,17 +27,18 @@ const complaintSchema = new mongoose.Schema({
     enum: ['pending', 'in-progress', 'resolved', 'rejected'],
     default: 'pending'
   },
-  adminResponse: {
+  response: {
     type: String
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
+  respondedAt: {
+    type: String
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now
+  isPermanent: {
+    type: Boolean,
+    default: false
   }
+}, {
+  timestamps: true // Automatically manages createdAt and updatedAt
 });
 
 module.exports = mongoose.model('Complaint', complaintSchema);
